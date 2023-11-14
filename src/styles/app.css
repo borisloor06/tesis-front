@@ -1,0 +1,39 @@
+.navBar {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 3rem 0;
+}
+
+.navBar:hover {
+    text-decoration: underline;
+    color: #ffd900
+}
+
+/* Index */
+.main-index {
+    display: flex;
+    width: 100%;
+}
+
+.sur-container {
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+    background-color: #3a3519;
+    margin: 1rem 1rem 0 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.can-aside {
+    flex: 1;
+    background-color: rgb(66, 125, 125);
+    margin: 1rem 2rem 0 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+/* My Surveys */
+
+/* Answered */
+
