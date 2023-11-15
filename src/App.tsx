@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import Login from './components/Landing';
-import Register from './components/Register';
+import Landing from './components/Landing';
 import './styles/global.css';
 import Home from './components/App/Home';
 
@@ -24,15 +23,14 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+        <Header isLoggedIn={isLoggedIn}/>
         <Routes>
           <Route
             path='/'
             element={
-              isLoggedIn ? <Home /> : <Login handleLogin={handleLogin} />
+              isLoggedIn ? <Home /> : <Landing handleLogin={handleLogin} />
             }
           />
-          <Route path='/register' element={<Register />} />
         </Routes>
       </BrowserRouter>
       {!isLoggedIn && <Footer />}
