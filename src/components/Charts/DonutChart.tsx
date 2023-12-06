@@ -30,10 +30,10 @@ export function DonutChart({
 		labels: labels,
 		datasets: [
 			{
-				label: "Puntuación",
+				label: "Cantidad",
 				data: data,
-				backgroundColor: ["#141DF0bb", "#F05911cc", "#1EF00Acc"],
-				borderColor: ["#141DF0aa", "#F05911ff", "#1EF00Aff"],
+				backgroundColor: ["#1EF00Acc", "#141DF0bb", "#F05911cc"],
+				borderColor: ["#1EF00Aff", "#141DF0aa", "#F05911ff"],
 				borderWidth: 1,
 			},
 		],
