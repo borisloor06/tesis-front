@@ -4,13 +4,14 @@ import "../../styles/app.css";
 import { MdDashboard, MdSettings, MdOutlineDoubleArrow } from "react-icons/md";
 import { FaCloud } from "react-icons/fa";
 import { TbHexagonLetterT } from "react-icons/tb";
+import { BiSolidAnalyse } from "react-icons/bi";
 
 interface SidebarProps {
 	setCurrentTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ setCurrentTab }) => {
-	const [currentTabName, setCurrentTabName] = useState("Análisis NLP");
+	const [currentTabName, setCurrentTabName] = useState("Dashboard");
 	const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
 	const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
@@ -50,10 +51,10 @@ const Sidebar: React.FC<SidebarProps> = ({ setCurrentTab }) => {
 					<Link
 						to="/"
 						className={`navBar nav-link text-white ${
-							currentTabName === "Análisis NLP" ? "active" : ""
+							currentTabName === "Dashboard" ? "active" : ""
 						}`}
 						onClick={() => {
-							handleTabClick("Análisis NLP");
+							handleTabClick("Dashboard");
 							handleNavToggle();
 						}}
 					>
@@ -65,7 +66,29 @@ const Sidebar: React.FC<SidebarProps> = ({ setCurrentTab }) => {
 								marginTop: "-.3rem",
 							}}
 						/>
-						Inicio
+						Dashboard
+					</Link>
+				</li>
+				<li className="nav-item">
+					<Link
+						to="/"
+						className={`navBar nav-link text-white ${
+							currentTabName === "Análisis NLP" ? "active" : ""
+						}`}
+						onClick={() => {
+							handleTabClick("Análisis NLP");
+							handleNavToggle();
+						}}
+					>
+						<BiSolidAnalyse 
+							style={{
+								marginRight: "1rem",
+								width: "1.2rem",
+								height: "1.5rem",
+								marginTop: "-.3rem",
+							}}
+						/>
+						Análisis NLP
 					</Link>
 				</li>
 				<li className="nav-item">

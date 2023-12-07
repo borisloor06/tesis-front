@@ -10,8 +10,8 @@ import { RadarChart } from "../Charts/RadarChart";
 import { ScatterChart } from "../Charts/ScatterChart";
 import { BubbleChart } from "../Charts/BubbleChart";
 import { HBarChart } from "../Charts/HBarChart";
-import * as services from "../Services/GetDataServices";
-import IAnalysisData from "../Services/IAnalysisData";
+import * as services from "../../services/GetDataServices";
+import IAnalysisData from "../../services/IAnalysisData";
 import {
 	MdNotifications,
 	MdOutlineKeyboardDoubleArrowLeft,
@@ -26,92 +26,32 @@ import { HiUserCircle } from "react-icons/hi2";
 import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { VscSymbolKeyword } from "react-icons/vsc";
-import _, { set } from "lodash";
+import _, { get, set } from "lodash";
+import useSearch from "../../hooks/useSearch";
+import useKeywords from "../../hooks/useKeywords";
+import useSentiments from "../../hooks/useSentiments";
+import useAnalysis from "../../hooks/useAnalysis";
 
-const Index = () => {
+const AnalysisNLP = () => {
+	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
+		useKeywords();
+	const { positiveSentiments, negativeSentiments, neutralSentiments, getSentiments } =
+		useSentiments();
+	const { vaderAnalysis, transformerAnalysis, getAnalys } = useAnalysis();
+	const { inputValue, handleInputChange } = useSearch();
+
 	const [data, setData] = useState<IAnalysisData[]>([]);
+	const [vaderAnalysisTC, setVaderAnalysisTC] = useState<number>(0);
+	const [transformerAnalysisTC, setTransformerAnalysisTC] = useState<number>(0);
 
-	const [inputValue, setInputValue] = useState("");
-	const [topKeywords, setTopKeywords] = useState<[string, number][]>([]);
-	const [positiveSentiments, setPositiveSentiments] = useState<[string, number][]>([]);
-	const [negativeSentiments, setNegativeSentiments] = useState<[string, number][]>([]);
-	const [neutralSentiments, setNeutralSentiments] = useState<[string, number][]>([]);
-
-	const [vaderAnalysis, setVaderAnalysis] = useState<[string, number][]>([]);
-	const [currentIndex, setCurrentIndex] = useState(0);
-
-	const handleNextWord = () => {
-		setCurrentIndex((prevIndex) => (prevIndex + 1) % topKeywords.length);
-	};
-
-	const handlePreviousWord = () => {
-		setCurrentIndex((prevIndex) =>
-			prevIndex === 0 ? topKeywords.length - 1 : (prevIndex - 1) % topKeywords.length
-		);
-	};
-	const handleInputChange = (event: any) => {
-		setInputValue(event.target.value);
-	};
 	const getData = async () => {
 		const res = await services.getAnalysis();
 		const analysis = res.data;
-		const postKeywords = analysis[0]?.keywords?.posts;
-		const sentimentsData = analysis[0]?.transformer_analysis;
-		const vaderAnalysisData = analysis[0]?.vader_analysis.labels;
-
-		const positiveSentiments: [string, number][] = [];
-		const negativeSentiments: [string, number][] = [];
-		const neutralSentiments: [string, number][] = [];
-		const vaderAnalysis: [string, number][] = Object.entries(vaderAnalysisData || {});
-
-		for (const [key, value] of Object.entries(sentimentsData || {})) {
-			if (
-				key === "admiration" ||
-				key === "amusement" ||
-				key === "approval" ||
-				key === "caring" ||
-				key === "curiosity" ||
-				key === "desire" ||
-				key === "excitement" ||
-				key === "gratitude" ||
-				key === "joy" ||
-				key === "love" ||
-				key === "optimism" ||
-				key === "pride" ||
-				key === "realization" ||
-				key === "relief"
-			) {
-				positiveSentiments.push([key, value as number]);
-			} else if (
-				key === "anger" ||
-				key === "annoyance" ||
-				key === "disappointment" ||
-				key === "disapproval" ||
-				key === "disgust" ||
-				key === "embarrassment" ||
-				key === "fear" ||
-				key === "grief" ||
-				key === "remorse" ||
-				key === "sadness"
-			) {
-				negativeSentiments.push([key, value as number]);
-			} else {
-				neutralSentiments.push([key, value as number]);
-			}
-		}
-
-		// Filtrar las 10 palabras con la puntuación más alta de los títulos
-		const topKeywords: [string, number][] = Object.entries(postKeywords || {})
-			.filter(([word, score]) => isNaN(Number(word)) && typeof score === "number")
-			.sort(([, scoreA]: any, [, scoreB]: any) => scoreB - scoreA)
-			.slice(0, 21) as [string, number][];
-
-		setPositiveSentiments(positiveSentiments);
-		setNegativeSentiments(negativeSentiments);
-		setNeutralSentiments(neutralSentiments);
-		setVaderAnalysis(vaderAnalysis);
-		setTopKeywords(topKeywords);
+		const vaderAnalysisTC = analysis[0]?.vader_analysis.total_average;
+		const transformerAnalysisTC = analysis[0]?.transformer_analysis.total_average;
 		setData(analysis);
+		setVaderAnalysisTC(vaderAnalysisTC);
+		setTransformerAnalysisTC(transformerAnalysisTC);
 	};
 
 	// Definir las labels y los scores para el gráfico de barras de sentimientos positivos
@@ -130,8 +70,15 @@ const Index = () => {
 	const vaderAnalysisLabels = vaderAnalysis.map(([label, score]) => label);
 	const vaderAnalysisScores = vaderAnalysis.map(([label, score]) => score);
 
+	// Definir las labels y los scores para el gráfico de donut de sentimientos a partir de los datos de Transformers
+	const transformerAnalysisScores = transformerAnalysis.map(([label, score]) => score);
+	const transformerAnalysisLabels = transformerAnalysis.map(([label, score]) => label);
+
 	useEffect(() => {
 		getData();
+		getKeywords();
+		getSentiments();
+		getAnalys();
 	}, []);
 
 	return (
@@ -172,7 +119,7 @@ const Index = () => {
 				</ul>
 				<ul className="row-header">
 					<li>
-						<h3>Dashboard</h3>
+						<h3>Datos de la extracción</h3>
 					</li>
 					<li>
 						<div>Mostrando:</div>
@@ -239,48 +186,9 @@ const Index = () => {
 							<MdOutlineKeyboardDoubleArrowRight onClick={handleNextWord} className="ni-kw" />
 						</div>
 					</li>
-					<li>
-						<div>
-							<IoStatsChart
-								style={{
-									marginRight: "1rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Media de comentarios por Post
-						</div>
-						<h3>{data.map((item) => parseFloat(item.average_comment_post_count.toFixed(2)))}</h3>{" "}
-					</li>
-					<li>
-						<div>
-							<IoStatsChart
-								style={{
-									marginRight: "1rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Puntuación media por comentario
-						</div>
-						<h3>{data.map((item) => parseFloat(item.average_comment_score.toFixed(2)))}</h3>
-					</li>
-					<li>
-						<div>
-							<IoStatsChart
-								style={{
-									marginRight: "1rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Media de comentarios por autor
-						</div>
-						<h3>{data.map((item) => parseFloat(item.average_author_comment_count.toFixed(2)))}</h3>
-					</li>
 				</ul>
-				<ul className="row-second">
-					<li className="donut-chart">
+				<ul className="row-second-nlp">
+					<li className="donut-chart-v">
 						<div>
 							<MdDonutLarge
 								style={{
@@ -289,13 +197,36 @@ const Index = () => {
 									height: "2rem",
 								}}
 							/>
-							Análisis de Sentimientos
+							Análisis de Sentimientos (Vader)
 						</div>
 						<DonutChart
 							labels={vaderAnalysisLabels}
 							data={vaderAnalysisScores}
 							title="Análisis de Sentimientos"
+							borderColors={["#ffd500ff", "#00aeffff", "#FF00FFff"]}
+							backgroundColors={["#ffd500cc", "#00aeffcc", "#FF00FFcc"]}
 						/>
+						<div>Promedio total: {vaderAnalysisTC}</div>
+					</li>
+					<li className="donut-chart-t">
+						<div>
+							<MdDonutLarge
+								style={{
+									marginRight: "1rem",
+									width: "2rem",
+									height: "2rem",
+								}}
+							/>
+							Análisis de Sentimientos (Transformers)
+						</div>
+						<DonutChart
+							labels={transformerAnalysisLabels}
+							data={transformerAnalysisScores}
+							title="Análisis de Sentimientos"
+							borderColors={["#00FF00ff", "#0000FFcc", "#FF0000ff"]}
+							backgroundColors={["#00FF00cc", "#0000FFcc", "#FF0000cc"]}
+						/>
+						<div>Promedio total: {transformerAnalysisTC}</div>
 					</li>
 					<li className="bar-chart">
 						<div>
@@ -312,7 +243,18 @@ const Index = () => {
 							labels={positiveSentimentsLabels}
 							data={positiveSentimentsScores}
 							title="Sentimientos positivos"
-							backG={["#00CCC9cc", "#00A3A0cc", "#00F0ECcc", "#007A78cc", "#00E6E3cc", "#00524Fcc"]}
+							backG={[
+								"#00CCC9cc",
+								"#00A3A0cc",
+								"#00F0ECcc",
+								"#007A78cc",
+								"#00E6E3cc",
+								"#00524Fcc",
+								"#00BEBBcc",
+								"#00E6E3cc",
+								"#00A3A0cc",
+								"#00CCC9cc",
+							]}
 						/>
 					</li>
 					<li className="bar-chart2">
@@ -357,4 +299,4 @@ const Index = () => {
 	);
 };
 
-export default Index;
+export default AnalysisNLP;

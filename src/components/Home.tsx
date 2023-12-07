@@ -1,17 +1,20 @@
 import { useState } from "react";
-import Sidebar from "../Header/Sidebar";
-import Index from "./Index";
-import Transformers from "./Transformers";
-import WCPage from "./WCPage";
-import "../../styles/app.css";
+import Sidebar from "./Header/Sidebar";
+import Index from "./App/Dashboard";
+import Transformers from "./App/Transformers";
+import WCPage from "./App/WCPage";
+import "../styles/app.css";
+import AnalysisNLP from "./App/AnalysisNLP";
 
 function Home() {
-	const [currentTab, setCurrentTab] = useState("Inicio");
+	const [currentTab, setCurrentTab] = useState("Dashboard");
 
 	const renderTab = () => {
 		switch (currentTab) {
-			case "Análisis NLP":
+			case "Dashboard":
 				return <Index />;
+			case "Análisis NLP":
+				return <AnalysisNLP />;
 			case "Another":
 				return <Transformers />;
 			case "Nube de Palabras":

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SERVER = "http://localhost:5000/analisis";
+const SERVER = "https://back.nlp-project.me/analisis";
 
 
 export const getAnalysis = async () => {

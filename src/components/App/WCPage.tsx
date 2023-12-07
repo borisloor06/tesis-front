@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/app.css";
 import WordCloud from "../Charts/WordCloud";
-import * as services from "../Services/GetDataServices";
-import IAnalysisData from "../Services/IAnalysisData";
 import { MdNotifications, MdSearch, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { HiUserCircle } from "react-icons/hi2";
 import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
@@ -10,6 +8,8 @@ import { IoStatsChart } from "react-icons/io5";
 import { PiArrowsClockwiseBold } from "react-icons/pi";
 import { VscSymbolKeyword } from "react-icons/vsc";
 import _ from "lodash";
+import useSearch from "../../hooks/useSearch";
+import useKeywords from "../../hooks/useKeywords";
 
 const KeywordDisplay = ({ wcKeywords }: any) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,51 +29,18 @@ const KeywordDisplay = ({ wcKeywords }: any) => {
 };
 
 const WCPage = () => {
-	const [data, setData] = useState<IAnalysisData[]>([]);
 	const [generate, setGenerate] = useState(false);
-	const [wcKeywords, setWcKeywords] = useState<[string, number][]>([]);
-	const [inputValue, setInputValue] = useState("");
+	const { inputValue, handleInputChange } = useSearch();
+	const { data, wcKeywords, getKeywords } = useKeywords();	
+
+	const words = wcKeywords.map(([text, size]) => ({ text, size }));
 
 	const handleButtonClick = () => {
 		setGenerate((prevGenerate) => !prevGenerate);
 	};
 
-	const handleInputChange = (event: any) => {
-		setInputValue(event.target.value);
-	};
-
-	const getData = async () => {
-		try {
-			const res = await services.getAnalysis();
-			const analysis = res.data;
-
-			const commentKeywords = analysis[0]?.keywords?.comment;
-
-			// Filtrar las 10 palabras con la puntuación más alta de los comentarios
-			const wcKeywords: [string, number][] = Object.entries(commentKeywords || {})
-				.filter(
-					([word, score]) =>
-						isNaN(Number(word)) &&
-						typeof score === "number" &&
-						word.length <= 15 &&
-						!word.includes("chatgpt") &&
-						!/\d/.test(word)
-				)
-				.sort(([, scoreA]: any, [, scoreB]: any) => scoreB - scoreA)
-				.slice(0, 60)
-				.map(([word, score], index) => [word, 60 - index]) as [string, number][];
-
-			setWcKeywords(wcKeywords);
-			setData(analysis);
-		} catch (error) {
-			console.error("Error al obtener datos:", error);
-		}
-	};
-
-	const words = wcKeywords.map(([text, size]) => ({ text, size }));
-
 	useEffect(() => {
-		getData();
+		getKeywords();
 	}, []);
 
 	return (

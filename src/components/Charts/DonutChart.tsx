@@ -14,6 +14,23 @@ const options = (title: string) => ({
 			display: false,
 			text: title,
 		},
+		tooltip: {
+			enabled: true,
+			padding: 10,
+			caretPadding: 10,
+			caretSize: 9,
+			cornerRadius: 10,
+			displayColors: true,
+			backgroundColor: "#000000cc",
+			bodyFont: {
+				size: 16,
+			},
+			bodySpacing: 10,
+			titleFont: {
+				size: 16,
+			},
+			titleSpacing: 10,
+		},
 	},
 });
 
@@ -21,10 +38,14 @@ export function DonutChart({
 	labels,
 	data,
 	title,
+	borderColors,
+	backgroundColors,
 }: {
 	labels: string[];
 	data: number[];
 	title: string;
+	borderColors: string[];
+	backgroundColors: string[];
 }) {
 	const donutData = {
 		labels: labels,
@@ -32,8 +53,8 @@ export function DonutChart({
 			{
 				label: "Cantidad",
 				data: data,
-				backgroundColor: ["#1EF00Acc", "#141DF0bb", "#F05911cc"],
-				borderColor: ["#1EF00Aff", "#141DF0aa", "#F05911ff"],
+				backgroundColor: backgroundColors,
+				borderColor: borderColors,
 				borderWidth: 1,
 			},
 		],

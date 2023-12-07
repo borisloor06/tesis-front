@@ -1,66 +1,89 @@
-import { Bar } from 'react-chartjs-2';
+import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+} from "chart.js";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const options = {
-  indexAxis: 'y' as const,
-  elements: {
-    bar: {
-      borderWidth: 2,
+const options = (title?: string) => ({
+	responsive: true,
+	indexAxis: "y" as const,
+	elements: {
+        bar: {
+            borderWidth: 2,
+		},
+	},
+	plugins: {
+        legend: {
+			display: false,
+			position: "right" as const,
+		},
+		title: {
+            display: false,
+			text: title,
+		},
+        tooltip: {
+			enabled: true,
+			padding: 10,
+			caretPadding: 10,
+			caretSize: 9,
+			cornerRadius: 10,
+			displayColors: true,
+			backgroundColor: "#000000cc",
+			bodyFont: {
+				size: 16,
+			},
+			bodySpacing: 10,
+			titleFont: {
+				size: 16,
+			},
+			titleSpacing: 10,
+		},
+	},
+    scales: {
+        y: {
+            position: "right" as const,
+            ticks: {
+                font: {
+                    size: 16
+                }
+            }
+        },
+        x: {
+            ticks: {
+                font: {
+                    size: 16
+                }
+            }
+        }
     },
-  },
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'right' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Horizontal Bar Chart',
-    },
-  },
-};
+});
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => getRandomNumber(-1000, 1000)),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => getRandomNumber(-1000, 1000)),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
-
-function getRandomNumber(min: number, max: number): number {
-	return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-export function HBarChart() {
-  return <Bar options={options} data={data} />;
+export function HBarChart({
+	labels,
+	data,
+	title,
+	backG,
+}: {
+	labels: string[];
+	data: number[];
+	title?: string;
+	backG: string[];
+}) {
+	const chartData = {
+		labels: labels,
+		datasets: [
+			{
+				data: data,
+				backgroundColor: backG,
+			}
+		],
+	};
+	return <Bar data={chartData} options={options(title)} />;
 }

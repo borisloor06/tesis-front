@@ -1,4 +1,4 @@
-import '../../styles/logAndReg.css';
+import '../../styles/landing.css';
 
 const Footer = () => {
   return (

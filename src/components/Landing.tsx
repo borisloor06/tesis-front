@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/global.css";
-import "../styles/logAndReg.css";
+import "../styles/landing.css";
 import { MdOutlineDoubleArrow } from "react-icons/md";
 import ReactComponent from "../assets/data_p.svg";
 

@@ -36,7 +36,7 @@ const options = (title: string) => ({
 	scales: {
 		y: {
 			min: 0,
-			max: 0.1,
+			max: 1,
 		},
 		x: {
 			ticks: { color: "#676767" },

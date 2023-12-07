@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Landing from './components/Landing';
 import './styles/global.css';
-import Home from './components/App/Home';
+import Home from './components/Home';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
