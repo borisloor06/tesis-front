@@ -1,36 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../../styles/app.css";
-import LineChart from "../Charts/LineChart";
-import BarsChart from "../Charts/VBarChart";
-import PieChart from "../Charts/PieChart";
-import { DonutChart } from "../Charts/DonutChart";
-import { AreaChart } from "../Charts/AreaChart";
-import { PolarChart } from "../Charts/PolarChart";
-import { RadarChart } from "../Charts/RadarChart";
-import { ScatterChart } from "../Charts/ScatterChart";
-import { BubbleChart } from "../Charts/BubbleChart";
-import { HBarChart } from "../Charts/HBarChart";
-import * as services from "../../services/GetDataServices";
-import IAnalysisData from "../../services/IAnalysisData";
+import "../../../styles/app.css";
+import BarsChart from "../../../components/Charts/VBarChart";
+import { DonutChart } from "../../../components/Charts/DonutChart";
+import * as services from "../../../services/GetDataServices";
+import IAnalysisData from "../../../services/interfaces/IAnalysisData";
 import {
-	MdNotifications,
 	MdOutlineKeyboardDoubleArrowLeft,
 	MdOutlineKeyboardDoubleArrowRight,
 	MdOutlineSentimentSatisfied,
 	MdOutlineSentimentDissatisfied,
 	MdOutlineSentimentNeutral,
-	MdSearch,
 	MdDonutLarge,
 } from "react-icons/md";
-import { HiUserCircle } from "react-icons/hi2";
 import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
-import { IoStatsChart } from "react-icons/io5";
 import { VscSymbolKeyword } from "react-icons/vsc";
-import _, { get, set } from "lodash";
-import useSearch from "../../hooks/useSearch";
-import useKeywords from "../../hooks/useKeywords";
-import useSentiments from "../../hooks/useSentiments";
-import useAnalysis from "../../hooks/useAnalysis";
+import useKeywords from "../../../hooks/useKeywords";
+import useSentiments from "../../../hooks/useSentiments";
+import useAnalysis from "../../../hooks/useAnalysis";
+import RowUser from "../../../components/Header/RowUser";
+import RowFilter from "../../../components/Header/RowFilter";
 
 const AnalysisNLP = () => {
 	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
@@ -38,7 +26,6 @@ const AnalysisNLP = () => {
 	const { positiveSentiments, negativeSentiments, neutralSentiments, getSentiments } =
 		useSentiments();
 	const { vaderAnalysis, transformerAnalysis, getAnalys } = useAnalysis();
-	const { inputValue, handleInputChange } = useSearch();
 
 	const [data, setData] = useState<IAnalysisData[]>([]);
 	const [vaderAnalysisTC, setVaderAnalysisTC] = useState<number>(0);
@@ -84,50 +71,9 @@ const AnalysisNLP = () => {
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<ul className="row-user">
-					<li className="search-container">
-						<input
-							type="search"
-							name="Search"
-							id="sh"
-							placeholder="Introduce a word"
-							value={inputValue}
-							onChange={handleInputChange}
-							onFocus={() => document.querySelector(".search-icon")?.classList.add("hide-icon")}
-							onBlur={() => {
-								if (!inputValue)
-									document.querySelector(".search-icon")?.classList.remove("hide-icon");
-							}}
-						/>
-						<MdSearch className="search-icon" />
-					</li>
-					<li>
-						<MdNotifications
-							style={{
-								marginRight: "1rem",
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-						<HiUserCircle
-							style={{
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-					</li>
-				</ul>
+				<RowUser />
 				<ul className="row-header">
-					<li>
-						<h3>Datos de la extracción</h3>
-					</li>
-					<li>
-						<div>Mostrando:</div>
-						<select className="filter-select">
-							<option value="0">Este año</option>
-							<option value="1">Este mes</option>
-						</select>
-					</li>
+					<RowFilter />
 				</ul>
 				<ul className="row-first">
 					<li>
@@ -206,7 +152,6 @@ const AnalysisNLP = () => {
 							borderColors={["#ffd500ff", "#00aeffff", "#FF00FFff"]}
 							backgroundColors={["#ffd500cc", "#00aeffcc", "#FF00FFcc"]}
 						/>
-						<div>Promedio total: {vaderAnalysisTC}</div>
 					</li>
 					<li className="donut-chart-t">
 						<div>
@@ -223,10 +168,9 @@ const AnalysisNLP = () => {
 							labels={transformerAnalysisLabels}
 							data={transformerAnalysisScores}
 							title="Análisis de Sentimientos"
-							borderColors={["#00FF00ff", "#0000FFcc", "#FF0000ff"]}
-							backgroundColors={["#00FF00cc", "#0000FFcc", "#FF0000cc"]}
+							borderColors={["#0000FFcc", "#FF0000ff", "#00FF00ff"]}
+							backgroundColors={["#0000FFcc", "#FF0000cc", "#00FF00cc"]}
 						/>
-						<div>Promedio total: {transformerAnalysisTC}</div>
 					</li>
 					<li className="bar-chart">
 						<div>

@@ -7,17 +7,18 @@ import {
 	MdSearch,
 } from "react-icons/md";
 import { HiUserCircle } from "react-icons/hi2";
-import useSearch from "../../hooks/useSearch";
-import IAnalysisData from "../../services/IAnalysisData";
-import * as services from "../../services/GetDataServices";
+import useSearch from "../../../hooks/useSearch";
+import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+import * as services from "../../../services/GetDataServices";
 import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
 import { VscSymbolKeyword } from "react-icons/vsc";
-import useKeywords from "../../hooks/useKeywords";
-import { HBarChart } from "../Charts/HBarChart";
-import useAnalysis from "../../hooks/useAnalysis";
-import { AreaChart } from "../Charts/AreaChart";
+import useKeywords from "../../../hooks/useKeywords";
+import { HBarChart } from "../../../components/Charts/HBarChart";
+import useAnalysis from "../../../hooks/useAnalysis";
+import { AreaChart } from "../../../components/Charts/AreaChart";
+import RowUser from "../../../components/Header/RowUser";
 
-function Transformers() {
+function History() {
 	const [result, setResult] = useState(null);
 	const [ready, setReady] = useState(false);
 	const [inputText, setInputText] = useState("");
@@ -86,39 +87,7 @@ function Transformers() {
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<ul className="row-user">
-					<li className="search-container">
-						<input
-							type="search"
-							name="Search"
-							id="sh"
-							placeholder="Introduce a word"
-							value={inputValue}
-							onChange={handleInputChange}
-							onFocus={() => document.querySelector(".search-icon")?.classList.add("hide-icon")}
-							onBlur={() => {
-								if (!inputValue)
-									document.querySelector(".search-icon")?.classList.remove("hide-icon");
-							}}
-						/>
-						<MdSearch className="search-icon" />
-					</li>
-					<li>
-						<MdNotifications
-							style={{
-								marginRight: "1rem",
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-						<HiUserCircle
-							style={{
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-					</li>
-				</ul>
+				<RowUser />
 				<ul className="row-header d-flex justify-content-center">
 					<li>
 						<h3>Análisis de texto</h3>
@@ -202,33 +171,9 @@ function Transformers() {
 						/>
 					</li>
 				</ul>
-				<hr></hr>
-				<ul className="row-header d-flex justify-content-center">
-					<li>
-						<h3>Análisis de texto con Transformers</h3>
-					</li>
-				</ul>
-				<ul className="row-input">
-					<div>
-						<input
-							type="text"
-							className="w-full max-w-xs p-2 border border-gray-300 rounded mb-4"
-							placeholder="Enter text here"
-							onInput={(e: any) => {
-								classify(e.target.value);
-							}}
-						/>
-
-						{ready !== null && (
-							<pre className="bg-gray-100 p-2 rounded">
-								{!ready || !result ? "Loading..." : JSON.stringify(result, null, 2)}
-							</pre>
-						)}
-					</div>
-				</ul>
 			</div>
 		</main>
 	);
 }
 
-export default Transformers;
+export default History;

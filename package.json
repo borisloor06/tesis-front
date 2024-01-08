@@ -5,6 +5,8 @@
   "private": true,
   "version": "1.0.0",
   "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
+    "@types/react-redux": "^7.1.33",
     "@xenova/transformers": "^2.9.0",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",
@@ -15,6 +17,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
+    "react-redux": "^9.0.4",
     "react-router-dom": "^6.19.0"
   },
   "scripts": {

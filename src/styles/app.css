@@ -35,6 +35,15 @@ body {
     padding: 1rem;
 }
 
+.sidebar li {
+    margin: 0 0 .5rem 0;
+}
+
+.sidebar li:hover {
+    background-color: var(--color-purple);
+    border-radius: .5rem;
+}
+
 .active {
     background-color: var(--color-active) !important;
     color: var(--color-dark) !important;
@@ -93,7 +102,7 @@ body {
     padding: 1rem;
 }
 
-/* li search */
+/* Row search */
 .row-user {
     display: flex;
     flex-direction: row;
@@ -142,6 +151,77 @@ input[type="search"]::placeholder {
     top: 50%;
     left: 1rem;
     transform: translateY(-50%);
+}
+
+.btn-extract {
+    text-align: center;
+    background-color: var(--color-dark);
+    /* Rosa */
+    color: #fff;
+    border: none;
+    padding: .6rem 1rem .6rem .8rem !important;
+    cursor: pointer;
+    margin: .8rem 0 0 1.2rem !important;
+}
+
+.btn-extract a {
+    color: var(--color-light);
+    text-decoration: none;
+}
+
+.btn-extract:hover {
+    background-color: var(--color-purple);
+}
+
+.btn-notifications {
+    cursor: pointer;
+    color: var(--color-primary);
+}
+
+.btn-notifications a {
+    text-decoration: none;
+}
+
+.btn-notifications:hover {
+    animation: shake-left-right .7s linear both
+}
+
+@keyframes shake-left-right {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+        transform-origin: 50% 50%
+    }
+
+    10% {
+        transform: rotate(8deg)
+    }
+
+    20%,
+    40%,
+    60% {
+        transform: rotate(-10deg)
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: rotate(10deg)
+    }
+
+    80% {
+        transform: rotate(-8deg)
+    }
+
+    90% {
+        transform: rotate(8deg)
+    }
+}
+
+.btn-profile {
+    color: var(--color-purple);
+    text-decoration: none;
 }
 
 /* Row header */
@@ -655,4 +735,82 @@ input[type="search"]::placeholder {
     width: 100%;
     border-radius: 1rem;
     padding: 1rem;
+}
+
+/* New Extraction */
+
+.main-extraction {
+    display: flex;
+    flex-direction: row;
+}
+
+.info-extraction {
+    display: flex;
+    width: 65%;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: justify;
+
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.info-extraction hr {
+    margin: 0 0 1rem 0;
+}
+
+.section-extraction {
+    background-color: var(--color-light2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    align-content: center;
+    padding: 0 1.5rem;
+    border-radius: 1.5rem;
+}
+
+.section-extraction .search-container {
+    margin: 1rem 0 2rem 0;
+}
+
+.section-extraction .btn-extract {
+    list-style: none;
+    margin: 3rem auto 0 !important;
+}
+
+.dates-extraction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.dates-extraction div {
+    text-align: center;
+}
+
+.dates-extraction h6 {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input[type="date"] {
+    padding: .5rem;
+    width: 12rem;
+    border: 1px solid #ccc;
+    border-radius: .9rem;
+    font-size: .9rem;
+    color: var(--color-purple);
+    margin: 0 0 2rem 0;
+}
+
+input[type="date"]:focus {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+input[type="date"]::placeholder {
+    color: #aaa;
 }

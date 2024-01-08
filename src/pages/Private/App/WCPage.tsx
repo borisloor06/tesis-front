@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/app.css";
-import WordCloud from "../Charts/WordCloud";
+import "../../../styles/app.css";
+import WordCloud from "../../../components/Charts/WordCloud";
 import { MdNotifications, MdSearch, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { HiUserCircle } from "react-icons/hi2";
 import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
@@ -8,8 +8,10 @@ import { IoStatsChart } from "react-icons/io5";
 import { PiArrowsClockwiseBold } from "react-icons/pi";
 import { VscSymbolKeyword } from "react-icons/vsc";
 import _ from "lodash";
-import useSearch from "../../hooks/useSearch";
-import useKeywords from "../../hooks/useKeywords";
+import useSearch from "../../../hooks/useSearch";
+import useKeywords from "../../../hooks/useKeywords";
+import RowUser from "../../../components/Header/RowUser";
+import RowFilter from "../../../components/Header/RowFilter";
 
 const KeywordDisplay = ({ wcKeywords }: any) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -30,8 +32,7 @@ const KeywordDisplay = ({ wcKeywords }: any) => {
 
 const WCPage = () => {
 	const [generate, setGenerate] = useState(false);
-	const { inputValue, handleInputChange } = useSearch();
-	const { data, wcKeywords, getKeywords } = useKeywords();	
+	const { data, wcKeywords, getKeywords } = useKeywords();
 
 	const words = wcKeywords.map(([text, size]) => ({ text, size }));
 
@@ -46,53 +47,12 @@ const WCPage = () => {
 	return (
 		<main className="main-index">
 			<div className="chart-container main-word-cloud">
-				<ul className="row-user">
-					<li className="search-container">
-						<input
-							type="search"
-							name="Search"
-							id="sh"
-							placeholder="Introduce a word"
-							value={inputValue}
-							onChange={handleInputChange}
-							onFocus={() => document.querySelector(".search-icon")?.classList.add("hide-icon")}
-							onBlur={() => {
-								if (!inputValue)
-									document.querySelector(".search-icon")?.classList.remove("hide-icon");
-							}}
-						/>
-						<MdSearch className="search-icon" />
-					</li>
-					<li>
-						<MdNotifications
-							style={{
-								marginRight: "1rem",
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-						<HiUserCircle
-							style={{
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-					</li>
-				</ul>
+				<RowUser />
 				<ul className="row-header">
-					<li>
-						<h3>Dashboard</h3>
-					</li>
-					<li>
-						<div>Mostrando:</div>
-						<select className="filter-select">
-							<option value="0">Este año</option>
-							<option value="1">Este mes</option>
-						</select>
-						<div onClick={handleButtonClick}>
-							<PiArrowsClockwiseBold className="refresh-icon" />
-						</div>
-					</li>
+					<RowFilter />
+					<div onClick={handleButtonClick}>
+						<PiArrowsClockwiseBold className="refresh-icon" />
+					</div>
 				</ul>
 				<ul className="word-cloud">
 					<div className="pOne">

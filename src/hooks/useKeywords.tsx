@@ -1,5 +1,5 @@
 import { useState } from "react";
-import IAnalysisData from "../services/IAnalysisData";
+import IAnalysisData from "../services/interfaces/IAnalysisData";
 import * as services from "../services/GetDataServices";
 
 const useKeywords = () => {

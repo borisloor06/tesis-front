@@ -1,47 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
-import "../../styles/app.css";
-import LineChart from "../Charts/LineChart";
-import BarsChart from "../Charts/VBarChart";
-import PieChart from "../Charts/PieChart";
-import { DonutChart } from "../Charts/DonutChart";
-import { AreaChart } from "../Charts/AreaChart";
-import { PolarChart } from "../Charts/PolarChart";
-import { RadarChart } from "../Charts/RadarChart";
-import { ScatterChart } from "../Charts/ScatterChart";
-import { BubbleChart } from "../Charts/BubbleChart";
-import { HBarChart } from "../Charts/HBarChart";
-import * as services from "../../services/GetDataServices";
-import IAnalysisData from "../../services/IAnalysisData";
+import React, { useEffect, useState } from "react";
+import "../../../styles/app.css";
+import LineChart from "../../../components/Charts/LineChart";
+import * as services from "../../../services/GetDataServices";
+import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+import IResumeData from "../../../services/interfaces/IResumeData";
 import {
-	MdNotifications,
 	MdOutlineKeyboardDoubleArrowLeft,
 	MdOutlineKeyboardDoubleArrowRight,
-	MdOutlineSentimentSatisfied,
-	MdOutlineSentimentDissatisfied,
-	MdOutlineSentimentNeutral,
-	MdSearch,
-	MdDonutLarge,
 	MdDateRange,
 } from "react-icons/md";
-import { HiUserCircle } from "react-icons/hi2";
 import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { VscSymbolKeyword } from "react-icons/vsc";
-import _, { get, set } from "lodash";
-import useSearch from "../../hooks/useSearch";
-import useKeywords from "../../hooks/useKeywords";
-import useSentiments from "../../hooks/useSentiments";
-import useAnalysis from "../../hooks/useAnalysis";
+import useKeywords from "../../../hooks/useKeywords";
+import RowUser from "../../../components/Header/RowUser";
 
 const Dashboard = () => {
 	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
 		useKeywords();
-	const { positiveSentiments, negativeSentiments, neutralSentiments, getSentiments } =
-		useSentiments();
-	const { vaderAnalysis, getAnalys } = useAnalysis();
-	const { inputValue, handleInputChange } = useSearch();
-
 	const [data, setData] = useState<IAnalysisData[]>([]);
+	const [resumeData, setResumeData] = useState<IResumeData[]>([]);
 
 	const getData = async () => {
 		const res = await services.getAnalysis();
@@ -49,75 +27,57 @@ const Dashboard = () => {
 		setData(analysis);
 	};
 
-	// Definir las labels y los scores para el gráfico de barras de sentimientos positivos
-	const positiveSentimentsLabels = positiveSentiments.map(([label, score]) => label);
-	const positiveSentimentsScores = positiveSentiments.map(([label, score]) => score);
+	// const getResumeData = async () => {
+	// 	const res = await services.getResumeData();
+	// 	const resume = res.data;
+	// 	console.log(resume);
+		
+	// 	setResumeData(resume);
+	// };
 
-	// Definir las labels y los scores para el gráfico de barras de sentimientos negativos
-	const negativeSentimentsLabels = negativeSentiments.map(([label, score]) => label);
-	const negativeSentimentsScores = negativeSentiments.map(([label, score]) => score);
+	// const posts_count = resumeData.map((item) => item.posts);
+	// console.log(posts_count);
+	
 
-	// Definir las labels y los scores para el gráfico de barras de sentimientos neutrales
-	const neutralSentimentsLabels = neutralSentiments.map(([label, score]) => label);
-	const neutralSentimentsScores = neutralSentiments.map(([label, score]) => score);
+	const beneficios = [0, 56, 20, 36, 80, 40, 30, 60, 25, 30, 12, 60];
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-	// Definir las labels y los scores para el gráfico de donut de sentimientos a partir de los datos de Vader
-	const vaderAnalysisLabels = vaderAnalysis.map(([label, score]) => label);
-	const vaderAnalysisScores = vaderAnalysis.map(([label, score]) => score);
+    const myDatasets = [
+        {
+            label: 'Comentarios',
+            data: beneficios,
+			tension: 0.3,
+            fill: true,
+            borderColor: '#40c639',
+            backgroundColor: '#40c63972',
+            pointRadius: 3,
+            pointBorderColor: '#3995c6',
+            pointBackgroundColor: '#3995c6aa',
+        },
+        {
+            label: 'Posts',
+            data: [20, 25, 60, 65, 45, 10, 0, 25, 35, 7, 20, 25],
+			tension: 0.3,
+            borderColor: '#c63940',
+            backgroundColor: '#c6394072',
+            pointRadius: 3,
+            pointBorderColor: '#c63940',
+            pointBackgroundColor: '#c63940aa',
+        },
+    ];
 
 	useEffect(() => {
 		getData();
 		getKeywords();
-		getSentiments();
-		getAnalys();
 	}, []);
 
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<ul className="row-user">
-					<li className="search-container">
-						<input
-							type="search"
-							name="Search"
-							id="sh"
-							placeholder="Introduce a word"
-							value={inputValue}
-							onChange={handleInputChange}
-							onFocus={() => document.querySelector(".search-icon")?.classList.add("hide-icon")}
-							onBlur={() => {
-								if (!inputValue)
-									document.querySelector(".search-icon")?.classList.remove("hide-icon");
-							}}
-						/>
-						<MdSearch className="search-icon" />
-					</li>
-					<li>
-						<MdNotifications
-							style={{
-								marginRight: "1rem",
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-						<HiUserCircle
-							style={{
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
-					</li>
-				</ul>
-				<ul className="row-header">
+				<RowUser />
+				<ul className="row-header d-flex justify-content-center">
 					<li>
 						<h3>Datos de la extracción</h3>
-					</li>
-					<li>
-						<div>Mostrando:</div>
-						<select className="filter-select">
-							<option value="0">Este año</option>
-							<option value="1">Este mes</option>
-						</select>
 					</li>
 				</ul>
 				<ul className="row-first">
@@ -258,7 +218,7 @@ const Dashboard = () => {
 							</div>
 						</div>
 						{/*Este gráfico está de muestra, habría que modificar para que aparezca la cantidad de comentarios y de posts por mes */}
-						<LineChart />
+						<LineChart labels={meses} datasets={myDatasets} />
 					</li>
 				</ul>
 			</div>
