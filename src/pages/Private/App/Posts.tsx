@@ -28,11 +28,9 @@ function Posts() {
 	const getPosts = async () => {
 		const offset = page * rowsPerPage;
 		const response = await services.getPosts(rowsPerPage, offset);
-		const data = JSON.stringify(response.data);
-		console.log(data);
-		console.log(JSON.parse(data));
+		const data = await response.json();
 
-		return JSON.parse(response.data) as ResponsePosts;
+		return data as ResponsePosts;
 	};
 
 	useEffect(() => {

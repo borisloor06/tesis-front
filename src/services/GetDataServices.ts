@@ -8,11 +8,21 @@ export const getAnalysis = async () => {
 };
 
 export const getPosts = async (limit: number, offset: number, reddit = "ChatGpt") => {
-	return await fetch.get(`${SERVER}/posts_data?name=${reddit}&offset=${offset}&limit=${limit}`);
+	return await fetch(`${SERVER}/posts_data?name=${reddit}&offset=${offset}&limit=${limit}`, {
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+	});
 };
 
 export const getComments = async (limit: number, offset: number, reddit = "ChatGpt") => {
-	return await axios.get(`${SERVER}/comments_data?name=${reddit}&offset=${offset}&limit=${limit}`);
+	return await axios.get(`${SERVER}/comments_data?name=${reddit}&offset=${offset}&limit=${limit}`, {
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+	});
 };
 
 export const getResumeData = async () => {
