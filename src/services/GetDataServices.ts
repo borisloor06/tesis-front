@@ -3,8 +3,8 @@ import axios from "axios";
 import { ResponseComments } from "./interfaces/IComments";
 import { ResponsePosts } from "./interfaces/IPosts";
 
-// const SERVER = "https://back.nlp-project.me";
-const SERVER = "http://localhost:5000";
+const SERVER = "https://back.nlp-project.me";
+// const SERVER = "http://localhost:5000";
 
 export const getAnalysis = async () => {
 	return await axios.get(`${SERVER}/analisis`);
