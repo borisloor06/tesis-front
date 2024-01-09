@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import { AppStore } from "../../../redux/store";
 import * as services from "../../../services/GetDataServices";
-import IPost from "../../../services/interfaces/IPosts";
+import IPost, { ResponsePosts } from "../../../services/interfaces/IPosts";
 import { Styles } from "./HistoryStyles";
 
 function Posts() {
@@ -28,14 +28,19 @@ function Posts() {
 	const getPosts = async () => {
 		const offset = page * rowsPerPage;
 		const response = await services.getPosts(rowsPerPage, offset);
+		const data = JSON.stringify(response.data);
+		console.log(data);
+		console.log(JSON.parse(data));
 
-		return response.data;
+		return JSON.parse(response.data) as ResponsePosts;
 	};
 
 	useEffect(() => {
 		getPosts()
 			.then((response) => {
 				const { posts, total } = response;
+				console.log(response);
+				console.log(posts);
 				setPosts(posts);
 				setTotal(total);
 			})
@@ -57,7 +62,7 @@ function Posts() {
 					</tr>
 				</thead>
 				<tbody>
-					{posts.length &&
+					{posts.length ? (
 						posts.map((row) => (
 							<tr key={row.id}>
 								<td>{row.id}</td>
@@ -72,7 +77,12 @@ function Posts() {
 								<td align="right">{row.num_comments}</td>
 								<td align="right">{row.created_date}</td>
 							</tr>
-						))}
+						))
+					) : (
+						<tr>
+							<td colSpan={7}>No hay datos</td>
+						</tr>
+					)}
 				</tbody>
 				<tfoot>
 					<tr>

@@ -1,8 +1,5 @@
 import axios from "axios";
 
-import { ResponseComments } from "./interfaces/IComments";
-import { ResponsePosts } from "./interfaces/IPosts";
-
 const SERVER = "https://back.nlp-project.me";
 // const SERVER = "http://localhost:5000";
 
@@ -11,15 +8,11 @@ export const getAnalysis = async () => {
 };
 
 export const getPosts = async (limit: number, offset: number, reddit = "ChatGpt") => {
-	return await axios.get<ResponsePosts>(
-		`${SERVER}/posts_data?name=${reddit}&offset=${offset}&limit=${limit}`
-	);
+	return await fetch.get(`${SERVER}/posts_data?name=${reddit}&offset=${offset}&limit=${limit}`);
 };
 
 export const getComments = async (limit: number, offset: number, reddit = "ChatGpt") => {
-	return await axios.get<ResponseComments>(
-		`${SERVER}/comments_data?name=${reddit}&offset=${offset}&limit=${limit}`
-	);
+	return await axios.get(`${SERVER}/comments_data?name=${reddit}&offset=${offset}&limit=${limit}`);
 };
 
 export const getResumeData = async () => {

@@ -14,7 +14,7 @@ function History() {
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [total, setTotal] = useState(0);
 	// Avoid a layout jump when reaching the last page with empty comments.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios?.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -55,7 +55,7 @@ function History() {
 					</tr>
 				</thead>
 				<tbody>
-					{comentarios.length &&
+					{comentarios?.length &&
 						comentarios.map((row) => (
 							<tr key={row.id}>
 								<td>{row.id}</td>
