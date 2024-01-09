@@ -68,14 +68,21 @@ const AnalysisNLP = () => {
 		getKeywords();
 		getSentiments();
 		getAnalys();
-	}, []);
+	}, [analysis]);
+
+	const refreshContent = () => {
+		GetData();
+		getKeywords();
+		getSentiments();
+		getAnalys();
+	};
 
 	return (
 		<main className="main-index">
 			<div className="chart-container">
 				<RowUser />
 				<ul className="row-header">
-					<RowFilter />
+					<RowFilter refreshContent={refreshContent} />
 				</ul>
 				<ul className="row-first">
 					<li>

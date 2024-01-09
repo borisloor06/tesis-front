@@ -43,7 +43,7 @@ const Sidebar = () => {
 				setCurrentTabName("Extracción de tema");
 				break;
 			case "/private/history":
-				setCurrentTabName("Historial de Análisis");
+				setCurrentTabName("Comentarios");
 				break;
 			case "/private/extraction":
 				setCurrentTabName("Nueva Extracción");
@@ -161,10 +161,10 @@ const Sidebar = () => {
 					<Link
 						to="/private/history"
 						className={`navBar nav-link text-white ${
-							currentTabName === "Historial de Análisis" ? "active" : ""
+							currentTabName === "Comentarios" ? "active" : ""
 						}`}
 						onClick={() => {
-							handleTabClick("Historial de Análisis");
+							handleTabClick("Comentarios");
 						}}
 					>
 						<FaHistory
@@ -175,7 +175,7 @@ const Sidebar = () => {
 								marginTop: "-.3rem",
 							}}
 						/>
-						Historial de Análisis
+						Comentarios
 					</Link>
 				</li>
 			</ul>

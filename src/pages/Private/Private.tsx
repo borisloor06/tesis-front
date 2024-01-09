@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { Navigate, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import { PrivateRoutes } from "../../models";
 import { RoutesWithNotFound } from "../../utilities";
@@ -18,8 +18,7 @@ function Private() {
 	return (
 		<RoutesWithNotFound>
 			<Route path="/" element={<Home />}>
-				<Route index element={<Navigate replace to="/private/dashboard" />} />
-				<Route path={PrivateRoutes.DASHBOARD} element={<Index />} />
+				<Route index element={<Index />} />
 				<Route path={PrivateRoutes.ANALYSIS_NLP} element={<AnalysisNLP />} />
 				<Route path={PrivateRoutes.WC_PAGE} element={<WCPage />} />
 				<Route path={PrivateRoutes.TRANSFORMERS} element={<Transformers />} />

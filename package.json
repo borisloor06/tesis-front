@@ -5,6 +5,7 @@
   "private": true,
   "version": "1.0.0",
   "dependencies": {
+    "@mui/base": "^5.0.0-beta.30",
     "@reduxjs/toolkit": "^2.0.1",
     "@types/react-redux": "^7.1.33",
     "@xenova/transformers": "^2.9.0",
@@ -12,6 +13,7 @@
     "chart.js": "^4.4.0",
     "d3": "^7.8.5",
     "d3-cloud": "^1.2.7",
+    "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",

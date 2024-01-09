@@ -1,174 +1,86 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
-import {
-	MdAlignHorizontalLeft,
-	MdOutlineKeyboardDoubleArrowLeft,
-	MdOutlineKeyboardDoubleArrowRight,
-} from "react-icons/md";
-import { VscSymbolKeyword } from "react-icons/vsc";
+import { TablePagination } from "@mui/base/TablePagination";
+import React from "react";
 import { useSelector } from "react-redux";
 
-import { HBarChart } from "../../../components/Charts/HBarChart";
-import RowUser from "../../../components/Header/RowUser";
 import useAnalysis from "../../../hooks/useAnalysis";
-import useKeywords from "../../../hooks/useKeywords";
-import useSearch from "../../../hooks/useSearch";
 import { AppStore } from "../../../redux/store";
-import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+import { Styles } from "./HistoryStyles";
 
 function History() {
-	const [result, setResult] = useState(null);
-	const [ready, setReady] = useState(false);
-	const [inputText, setInputText] = useState("");
-	const { inputValue, handleInputChange } = useSearch();
-	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
-		useKeywords();
-	const { topicExtraction, getAnalys } = useAnalysis();
-	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
 	const analysis = useSelector((store: AppStore) => store.analisis);
+	const comentarios = useSelector((store: AppStore) => store.comentarios);
+	const [page, setPage] = React.useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-	const getData = () => {
-		setData(analysis);
+	// Avoid a layout jump when reaching the last page with empty comments.
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comments.length) : 0;
+
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
 	};
 
-	const topicExtractionScores = topicExtraction.map(([label, score]) => score);
-	const topicExtractionLabels = topicExtraction.map(([label, score]) => label);
-
-	// Keep track of the classification result and the model loading status.
-
-	// Create a reference to the worker object.
-	const worker = useRef<Worker | null>(null);
-
-	// We use the `useEffect` hook to set up the worker as soon as the `App` component is mounted.
-	useEffect(() => {
-		if (!worker.current) {
-			// Create the worker if it does not yet exist.
-			worker.current = new Worker(new URL("./worker.js", import.meta.url), {
-				type: "module",
-			});
-		}
-
-		// Create a callback function for messages from the worker thread.
-		const onMessageReceived = (e: any) => {
-			switch (e.data.status) {
-				case "initiate":
-					setReady(false);
-					break;
-				case "ready":
-					setReady(true);
-					break;
-				case "complete":
-					setResult(e.data.output[0]);
-					break;
-			}
-
-			console.log(e.data.status);
-		};
-
-		// Attach the callback function as an event listener.
-		worker.current.removeEventListener("message", onMessageReceived);
-	});
-
-	const classify = useCallback((text: string) => {
-		if (worker.current) {
-			worker.current.postMessage({ text });
-		}
-	}, []);
-
-	useEffect(() => {
-		getData();
-		getKeywords();
-		getAnalys();
-	}, []);
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
 
 	return (
-		<main className="main-index">
-			<div className="chart-container">
-				<RowUser />
-				<ul className="row-header d-flex justify-content-center">
-					<li>
-						<h3>Análisis de texto</h3>
-					</li>
-				</ul>
-				<ul className="row-first">
-					<li>
-						<div>
-							<FaReddit
-								style={{
-									marginRight: "1rem",
-									width: "2rem",
-									height: "2rem",
-								}}
-							/>
-							Total de Posts
-						</div>
-						<h3>{data.total_posts}</h3>
-					</li>
-					<li>
-						<div>
-							<FaCommentAlt
-								style={{
-									marginRight: "1rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Total de Comentarios
-						</div>
-						<h3>{data.total_comments}</h3>
-					</li>
-					<li>
-						<div>
-							<FaUserEdit
-								style={{
-									marginRight: "1rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Total de autores
-						</div>
-						<h3>{data.total_authors}</h3>
-					</li>
-					<li>
-						<div>
-							<VscSymbolKeyword
-								style={{
-									marginRight: "1rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Palabras clave en títulos
-						</div>
-						<div className="top-keys">
-							<MdOutlineKeyboardDoubleArrowLeft onClick={handlePreviousWord} className="ni-kw" />
-							<h3>{topKeywords[currentIndex]?.[0]}</h3>
-							<MdOutlineKeyboardDoubleArrowRight onClick={handleNextWord} className="ni-kw" />
-						</div>
-					</li>
-				</ul>
-				<ul className="row-second-topic">
-					<li className="statistics">
-						<div>
-							<MdAlignHorizontalLeft
-								style={{
-									marginRight: "1rem",
-									marginLeft: ".5rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Frecuencia de temas por comentarios
-						</div>
-						<HBarChart
-							labels={topicExtractionLabels}
-							data={topicExtractionScores}
-							backG={["#A6F548ff", "#F28A49cc", "#49EDF2ff", "#B449F2cc", "#649B9Dcc"]}
+		<main className="main-index w-100">
+			<table aria-label="custom pagination table" className="d-table">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>Autor</th>
+						<th className="w-25">Comentario</th>
+						<th>Post</th>
+						<th>Fecha Creación</th>
+					</tr>
+				</thead>
+				<tbody>
+					{(rowsPerPage > 0
+						? comentarios.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+						: comentarios
+					).map((row) => (
+						<tr key={row.id}>
+							<td>{row.id}</td>
+							<td align="right">{row.author}</td>
+							<td className="overflow-hidden w-25" align="right">
+								{row.body}
+							</td>
+							<td align="right">{row.subreddit_id}</td>
+							<td align="right">{row.created_date}</td>
+						</tr>
+					))}
+					{emptyRows > 0 && (
+						<tr style={{ height: 41 * emptyRows }}>
+							<td colSpan={3} aria-hidden />
+						</tr>
+					)}
+				</tbody>
+				<tfoot>
+					<tr>
+						<TablePagination
+							rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+							colSpan={3}
+							count={comentarios.length}
+							rowsPerPage={rowsPerPage}
+							page={page}
+							slotProps={{
+								select: {
+									"aria-label": "comments per page",
+								},
+								actions: {
+									showFirstButton: true,
+									showLastButton: true,
+								},
+							}}
+							onPageChange={handleChangePage}
+							onRowsPerPageChange={handleChangeRowsPerPage}
 						/>
-					</li>
-				</ul>
-			</div>
+					</tr>
+				</tfoot>
+			</table>
+			<Styles />
 		</main>
 	);
 }

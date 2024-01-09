@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import "../../../styles/app.css";
 
 import { useEffect, useState } from "react";
@@ -25,7 +26,6 @@ function Home() {
 					setLoading(false);
 				}
 			})
-			// eslint-disable-next-line no-console
 			.catch((error) => console.log(error));
 	}, [dispatch]);
 
