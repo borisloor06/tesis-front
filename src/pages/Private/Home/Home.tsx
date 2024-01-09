@@ -9,6 +9,7 @@ import Sidebar from "../../../components/Header/Sidebar";
 import { createAnalisis } from "../../../redux/states/analisis";
 import * as services from "../../../services/GetDataServices";
 import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+import { resetAnalisisFiltered } from "../../../redux/states/analisisfiltered";
 
 function Home() {
 	const dispatch = useDispatch();

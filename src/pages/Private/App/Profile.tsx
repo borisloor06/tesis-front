@@ -2,7 +2,6 @@ import { useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { useSelector } from "react-redux";
 
-import RowUser from "../../../components/Header/RowUser";
 import useSearch from "../../../hooks/useSearch";
 import { AppStore } from "../../../redux/store";
 import IAnalysisData from "../../../services/interfaces/IAnalysisData";
@@ -19,7 +18,7 @@ function Profile() {
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<RowUser />
+				{/* <RowUser /> */}
 				<ul className="row-header d-flex justify-content-center">
 					<li>
 						<h3>Ingrese su tema</h3>

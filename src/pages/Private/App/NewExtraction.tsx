@@ -4,7 +4,6 @@ import { MdSearch } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import RowUser from "../../../components/Header/RowUser";
 import useSearch from "../../../hooks/useSearch";
 import { AppStore } from "../../../redux/store";
 import IAnalysisData from "../../../services/interfaces/IAnalysisData";
@@ -21,10 +20,10 @@ function NewExtraction() {
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<RowUser />
+				{/* <RowUser /> */}
 				<ul className="row-header d-flex justify-content-center">
 					<li>
-						<h3>Ingrese su tema</h3>
+						<h3>Ingrese su Reddit</h3>
 					</li>
 				</ul>
 				<div className="main-extraction">
@@ -34,10 +33,7 @@ function NewExtraction() {
 								<b>Parámetro de Extracción</b>
 								<br />
 							</h4>
-							<p>
-								El usuario seleccionará el tema que actuará como el valor clave para la extracción
-								de datos.
-							</p>
+							<p>El usuario ingresara un reddit del cual se extraerán los datos.</p>
 							<hr />
 						</div>
 
@@ -73,7 +69,7 @@ function NewExtraction() {
 								type="search"
 								name="Search"
 								id="sh"
-								placeholder="Introduce a word"
+								placeholder="Introduce un reddit"
 								value={inputValue}
 								onChange={handleInputChange}
 								onFocus={() => document.querySelector(".search-icon")?.classList.add("hide-icon")}

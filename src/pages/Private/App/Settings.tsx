@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MdAlignHorizontalLeft } from "react-icons/md";
 import { useSelector } from "react-redux";
 
-import RowUser from "../../../components/Header/RowUser";
 import useAnalysis from "../../../hooks/useAnalysis";
 import useKeywords from "../../../hooks/useKeywords";
 import useSearch from "../../../hooks/useSearch";
@@ -77,7 +76,7 @@ function Settings() {
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<RowUser />
+				{/* <RowUser /> */}
 				<ul className="row-header d-flex justify-content-center">
 					<li>
 						<h3>Análisis de texto</h3>

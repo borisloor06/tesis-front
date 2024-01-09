@@ -203,7 +203,7 @@ const Sidebar = () => {
 			</ul>
 			<hr></hr>
 			<ul className="nav nav-pills flex-column">
-				<li className="nav-item">
+				{/* <li className="nav-item">
 					<Link
 						to="/private/settings"
 						className={`navBar nav-link text-white ${
@@ -223,7 +223,7 @@ const Sidebar = () => {
 						/>
 						Configuraciones
 					</Link>
-				</li>
+				</li> */}
 				<li className="nav-item">
 					<Link to="/landing" className="navBar nav-link text-white">
 						<MdOutlineDoubleArrow
@@ -237,7 +237,7 @@ const Sidebar = () => {
 						Inicio
 					</Link>
 				</li>
-				<Logout />
+				{/* <Logout /> */}
 			</ul>
 		</div>
 	);

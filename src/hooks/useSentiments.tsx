@@ -8,8 +8,12 @@ const useSentiments = () => {
 	const [negativeSentiments, setNegativeSentiments] = useState<[string, number][]>([]);
 	const [neutralSentiments, setNeutralSentiments] = useState<[string, number][]>([]);
 	const analysis = useSelector((store: AppStore) => store.analisis);
+	const analisisFiltered = useSelector((store: AppStore) => store.filtered);
+
 	const GetSentiments = () => {
-		const sentimentsData = analysis.emotion_analysis.average;
+		const sentimentsData = analisisFiltered.total_posts
+			? analisisFiltered.emotion_analysis.average
+			: analysis.emotion_analysis.average;
 
 		const positiveSentiments: [string, number][] = [];
 		const negativeSentiments: [string, number][] = [];

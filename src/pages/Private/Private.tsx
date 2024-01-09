@@ -25,9 +25,9 @@ function Private() {
 				<Route path={PrivateRoutes.TRANSFORMERS} element={<Transformers />} />
 				<Route path={PrivateRoutes.HISTORY} element={<History />} />
 				<Route path={PrivateRoutes.POSTS} element={<Posts />} />
-				<Route path={PrivateRoutes.SETTINGS} element={<Settings />} />
-				<Route path={PrivateRoutes.EXTRACTION} element={<NewExtraction />} />
-				<Route path={PrivateRoutes.PROFILE} element={<Profile />} />
+				{/* <Route path={PrivateRoutes.SETTINGS} element={<Settings />} /> */}
+				{/* <Route path={PrivateRoutes.EXTRACTION} element={<NewExtraction />} /> */}
+				{/* <Route path={PrivateRoutes.PROFILE} element={<Profile />} /> */}
 			</Route>
 		</RoutesWithNotFound>
 	);

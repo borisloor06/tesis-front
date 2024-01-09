@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 
 import { HBarChart } from "../../../components/Charts/HBarChart";
 import RowFilter from "../../../components/Header/RowFilter";
-import RowUser from "../../../components/Header/RowUser";
 import useAnalysis from "../../../hooks/useAnalysis";
 import useKeywords from "../../../hooks/useKeywords";
 import useSearch from "../../../hooks/useSearch";
@@ -27,9 +26,9 @@ function Transformers() {
 	const { topicExtraction, getAnalys } = useAnalysis();
 	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
 	const analysis = useSelector((store: AppStore) => store.analisis);
-
+	const analisisFiltered = useSelector((store: AppStore) => store.filtered);
 	const getData = () => {
-		setData(analysis);
+		analisisFiltered.total_posts ? setData(analisisFiltered) : setData(analysis);
 	};
 
 	const topicExtractionScores = topicExtraction.map(([label, score]) => score);
@@ -80,14 +79,20 @@ function Transformers() {
 		getData();
 		getKeywords();
 		getAnalys();
-	}, []);
+	}, [analysis, analisisFiltered]);
+
+	const refreshContent = () => {
+		getData();
+		getKeywords();
+		getAnalys();
+	};
 
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<RowUser />
+				{/* <RowUser /> */}
 				<ul className="row-header d-flex justify-content-center">
-					<RowFilter />
+					<RowFilter refreshContent={refreshContent} />
 				</ul>
 				<ul className="row-first">
 					<li>
@@ -168,7 +173,7 @@ function Transformers() {
 					</li>
 				</ul>
 				<hr></hr>
-				<ul className="row-header d-flex justify-content-center">
+				{/* <ul className="row-header d-flex justify-content-center">
 					<li>
 						<h3>Análisis de texto con Transformers</h3>
 					</li>
@@ -190,7 +195,7 @@ function Transformers() {
 							</pre>
 						)}
 					</div>
-				</ul>
+				</ul> */}
 			</div>
 		</main>
 	);

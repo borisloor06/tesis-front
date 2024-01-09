@@ -5,11 +5,12 @@ import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { PiArrowsClockwiseBold } from "react-icons/pi";
 import { VscSymbolKeyword } from "react-icons/vsc";
+import { useSelector } from "react-redux";
 
 import WordCloud from "../../../components/Charts/WordCloud";
 import RowFilter from "../../../components/Header/RowFilter";
-import RowUser from "../../../components/Header/RowUser";
 import useKeywords from "../../../hooks/useKeywords";
+import { AppStore } from "../../../redux/store";
 
 const KeywordDisplay = ({ wcKeywords }: any) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,7 +32,8 @@ const KeywordDisplay = ({ wcKeywords }: any) => {
 const WCPage = () => {
 	const [generate, setGenerate] = useState(false);
 	const { data, wcKeywords, getKeywords } = useKeywords();
-
+	const analysis = useSelector((store: AppStore) => store.analisis);
+	const analisisFiltered = useSelector((store: AppStore) => store.filtered);
 	const words = wcKeywords.map(([text, size]) => ({ text, size }));
 
 	const handleButtonClick = () => {
@@ -40,14 +42,18 @@ const WCPage = () => {
 
 	useEffect(() => {
 		getKeywords();
-	}, []);
+	}, [analysis, analisisFiltered]);
+
+	const refreshContent = () => {
+		getKeywords();
+	};
 
 	return (
 		<main className="main-index">
 			<div className="chart-container main-word-cloud">
-				<RowUser />
+				{/* <RowUser /> */}
 				<ul className="row-header">
-					<RowFilter />
+					<RowFilter refreshContent={refreshContent} />
 					<div onClick={handleButtonClick}>
 						<PiArrowsClockwiseBold className="refresh-icon" />
 					</div>

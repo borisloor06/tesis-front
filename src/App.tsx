@@ -6,7 +6,6 @@ import { BrowserRouter, Navigate, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
 import Loader from "./components/Loader/Loader";
-import { AuthGuard } from "./guards";
 import { PrivateRoutes, PublicRoutes } from "./models";
 import Landing from "./pages/Login/Landing";
 import store from "./redux/store";
@@ -38,10 +37,10 @@ function App() {
 						<RoutesWithNotFound>
 							<Route path="/" element={<Navigate replace to={PrivateRoutes.PRIVATE} />} />
 							<Route path={PublicRoutes.LANDING} element={<Landing />} />
-							<Route path={PublicRoutes.LOGIN} element={<Login />} />
-							<Route element={<AuthGuard privateValidation={true} />}>
-								<Route path={`${PrivateRoutes.PRIVATE}/*`} element={<Private />} />
-							</Route>
+							{/* <Route path={PublicRoutes.LOGIN} element={<Login />} /> */}
+							{/* <Route element={<AuthGuard privateValidation={true} />}> */}
+							<Route path={`${PrivateRoutes.PRIVATE}/*`} element={<Private />} />
+							{/* </Route> */}
 						</RoutesWithNotFound>
 					</BrowserRouter>
 				</Provider>

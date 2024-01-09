@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 
-import { createAnalisis } from "../../redux/states/analisis";
+import { createAnalisisFiltered, resetAnalisisFiltered } from "../../redux/states/analisisfiltered";
 import * as services from "../../services/GetDataServices";
 import IAnalysisData from "../../services/interfaces/IAnalysisData";
 import Loader from "../Loader/Loader";
@@ -17,7 +17,7 @@ function RowFilter({ refreshContent }) {
 			setLoading(true);
 			const analysisResponse = await services.getAnalysisByFilter(startDate, endDate);
 			const analysisData = analysisResponse.data as IAnalysisData[];
-			dispatch(createAnalisis(analysisData[0]));
+			dispatch(createAnalisisFiltered(analysisData[0]));
 			setLoading(false);
 			refreshContent(true);
 		} catch (error) {
@@ -66,6 +66,11 @@ function RowFilter({ refreshContent }) {
 		await getAnalisis(startDateFormated, endDateFormated);
 	};
 
+	const handleCleanClick = async () => {
+		dispatch(resetAnalisisFiltered());
+		refreshContent(true);
+	};
+
 	return (
 		<>
 			{loading ? <Loader /> : null}
@@ -91,9 +96,14 @@ function RowFilter({ refreshContent }) {
 						<input type="date" name="date-end" id="date-end" />
 					</div>
 				</div>
-				<button onClick={handleFilterClick} disabled={loading}>
-					Aplicar
-				</button>
+				<div className="btn-group w-25 d-flex justify-content-around">
+					<button className="btn btn-primary" onClick={handleFilterClick} disabled={loading}>
+						Aplicar
+					</button>
+					<button className="btn btn-danger" onClick={handleCleanClick} disabled={loading}>
+						Limpiar
+					</button>
+				</div>
 			</li>
 		</>
 	);

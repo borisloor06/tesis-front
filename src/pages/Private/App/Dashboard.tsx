@@ -12,7 +12,6 @@ import { VscSymbolKeyword } from "react-icons/vsc";
 import { useSelector } from "react-redux";
 
 import LineChart from "../../../components/Charts/LineChart";
-import RowUser from "../../../components/Header/RowUser";
 import useKeywords from "../../../hooks/useKeywords";
 import { AppStore } from "../../../redux/store";
 import IResumeData from "../../../services/interfaces/IResumeData";
@@ -72,7 +71,7 @@ const Dashboard = () => {
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<RowUser />
+				{/* <RowUser /> */}
 				<ul className="row-header d-flex justify-content-center">
 					<li>
 						<h3>Datos de la extracción</h3>

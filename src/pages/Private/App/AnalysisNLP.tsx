@@ -16,7 +16,6 @@ import { useSelector } from "react-redux";
 import { DonutChart } from "../../../components/Charts/DonutChart";
 import BarsChart from "../../../components/Charts/VBarChart";
 import RowFilter from "../../../components/Header/RowFilter";
-import RowUser from "../../../components/Header/RowUser";
 import useAnalysis from "../../../hooks/useAnalysis";
 import useKeywords from "../../../hooks/useKeywords";
 import useSentiments from "../../../hooks/useSentiments";
@@ -35,10 +34,15 @@ const AnalysisNLP = () => {
 	const [transformerAnalysisTC, setTransformerAnalysisTC] = useState<number>(0);
 
 	const analysis = useSelector((store: AppStore) => store.analisis);
+	const analisisFiltered = useSelector((store: AppStore) => store.filtered);
 	const GetData = () => {
-		const vaderAnalysisTC = analysis.vader_analysis.total_average;
-		const transformerAnalysisTC = analysis.transformer_analysis.total_average;
-		setData(analysis);
+		const vaderAnalysisTC = analisisFiltered.total_posts
+			? analisisFiltered.vader_analysis.total_average
+			: analysis.vader_analysis.total_average;
+		const transformerAnalysisTC = analisisFiltered.total_posts
+			? analisisFiltered.transformer_analysis.total_average
+			: analysis.transformer_analysis.total_average;
+		analisisFiltered.total_posts ? setData(analisisFiltered) : setData(analysis);
 		setVaderAnalysisTC(vaderAnalysisTC);
 		setTransformerAnalysisTC(transformerAnalysisTC);
 	};
@@ -68,7 +72,7 @@ const AnalysisNLP = () => {
 		getKeywords();
 		getSentiments();
 		getAnalys();
-	}, [analysis]);
+	}, [analysis, analisisFiltered]);
 
 	const refreshContent = () => {
 		GetData();
@@ -80,7 +84,7 @@ const AnalysisNLP = () => {
 	return (
 		<main className="main-index">
 			<div className="chart-container">
-				<RowUser />
+				{/* <RowUser /> */}
 				<ul className="row-header">
 					<RowFilter refreshContent={refreshContent} />
 				</ul>

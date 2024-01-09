@@ -125,7 +125,7 @@ export const EmptyAnalisisState: IAnalysisData = {
 	},
 };
 
-export const AnalisisKey = "analisis";
+export const AnalisisKey = "analisis_filter";
 
 export const analisisSlice = createSlice({
 	name: AnalisisKey,
@@ -133,18 +133,18 @@ export const analisisSlice = createSlice({
 		? (JSON.parse(localStorage.getItem(AnalisisKey) as string) as IAnalysisData)
 		: EmptyAnalisisState,
 	reducers: {
-		createAnalisis: (state, action) => {
+		createAnalisisFiltered: (state, action) => {
 			persistLocalStorage<IAnalysisData>(AnalisisKey, action.payload as IAnalysisData);
 
 			return action.payload as IAnalysisData;
 		},
-		updateAnalisis: (state, action) => {
+		updateAnalisisFiltered: (state, action) => {
 			const result = { ...state, ...(action.payload as IAnalysisData) };
 			persistLocalStorage<IAnalysisData>(AnalisisKey, result as IAnalysisData);
 
 			return result;
 		},
-		resetAnalisis: () => {
+		resetAnalisisFiltered: () => {
 			clearLocalStorage(AnalisisKey);
 
 			return EmptyAnalisisState;
@@ -152,6 +152,7 @@ export const analisisSlice = createSlice({
 	},
 });
 
-export const { createAnalisis, updateAnalisis, resetAnalisis } = analisisSlice.actions;
+export const { createAnalisisFiltered, updateAnalisisFiltered, resetAnalisisFiltered } =
+	analisisSlice.actions;
 
 export default analisisSlice.reducer;

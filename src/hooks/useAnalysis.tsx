@@ -9,10 +9,18 @@ const useAnalysis = () => {
 	const [topicExtraction, setTopicExtraction] = useState<[string, number][]>([]);
 
 	const analysis = useSelector((store: AppStore) => store.analisis);
+	const analisisFiltered = useSelector((store: AppStore) => store.filtered);
+
 	const GetAnalys = () => {
-		const vaderAnalysisData = analysis.vader_analysis.count;
-		const transformersAnalysisData = analysis.transformer_analysis.count;
-		const topicExtractionData = analysis.topic_extraction;
+		const vaderAnalysisData = analisisFiltered.total_posts
+			? analisisFiltered.vader_analysis.count
+			: analysis.vader_analysis.count;
+		const transformersAnalysisData = analisisFiltered.total_posts
+			? analisisFiltered.transformer_analysis.count
+			: analysis.transformer_analysis.count;
+		const topicExtractionData = analisisFiltered.total_posts
+			? analisisFiltered.topic_extraction
+			: analysis.topic_extraction;
 
 		const vaderAnalysis = Object.entries(vaderAnalysisData);
 		const transformerAnalysis = Object.entries(transformersAnalysisData);

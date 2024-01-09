@@ -21,10 +21,15 @@ const useKeywords = () => {
 	};
 
 	const analysis = useSelector((store: AppStore) => store.analisis);
+	const analisisFiltered = useSelector((store: AppStore) => store.filtered);
 	const GetKeywords = () => {
 		try {
-			const commentKeywords = analysis.keywords.comment;
-			const postKeywords = analysis.keywords.posts;
+			const commentKeywords = analisisFiltered.total_posts
+				? analisisFiltered.keywords.comment
+				: analysis.keywords.comment;
+			const postKeywords = analisisFiltered.total_posts
+				? analisisFiltered.keywords.posts
+				: analysis.keywords.posts;
 
 			// Filtrar las 10 palabras con la puntuación más alta de los comentarios
 			const wcKeywords: [string, number][] = Object.entries(commentKeywords)
@@ -48,7 +53,7 @@ const useKeywords = () => {
 
 			setTopKeywords(topKeywords);
 			setWcKeywords(wcKeywords);
-			setData(analysis);
+			analisisFiltered.total_posts ? setData(analisisFiltered) : setData(analysis);
 		} catch (error) {
 			console.error("Error al obtener datos:", error);
 		}

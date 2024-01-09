@@ -41,7 +41,7 @@ function Landing() {
 				</h1>
 				<div className="btn-container">
 					<button>
-						<Link to="/login">
+						<Link to="/private">
 							Empezar <MdOutlineDoubleArrow />
 						</Link>
 					</button>
