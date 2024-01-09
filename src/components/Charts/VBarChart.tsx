@@ -1,15 +1,15 @@
-import { Bar } from "react-chartjs-2";
 import {
-	Chart as ChartJS,
+	BarElement,
 	CategoryScale,
+	Chart as ChartJS,
+	Filler,
+	Legend,
 	LinearScale,
 	PointElement,
-	BarElement,
 	Title,
 	Tooltip,
-	Legend,
-	Filler,
 } from "chart.js";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
 	CategoryScale,
@@ -56,11 +56,11 @@ export default function Bars({
 	backG: string[];
 }) {
 	const chartData = {
-		labels: labels,
+		labels,
 		datasets: [
 			{
 				label: "Puntuación",
-				data: data,
+				data,
 				backgroundColor: backG,
 			},
 		],

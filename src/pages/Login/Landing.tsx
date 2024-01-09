@@ -1,8 +1,10 @@
 import "../../styles/global.css";
 import "../../styles/landing.css";
+
 import { MdOutlineDoubleArrow } from "react-icons/md";
-import ReactComponent from "../../assets/data_p.svg";
 import { Link } from "react-router-dom";
+
+import ReactComponent from "../../assets/data_p.svg";
 
 function Landing() {
 	return (

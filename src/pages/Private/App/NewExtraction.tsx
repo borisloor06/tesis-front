@@ -1,21 +1,23 @@
 import { useState } from "react";
-import { MdDateRange, MdSearch } from "react-icons/md";
-import useSearch from "../../../hooks/useSearch";
-import IAnalysisData from "../../../services/interfaces/IAnalysisData";
-import * as services from "../../../services/GetDataServices";
-import RowUser from "../../../components/Header/RowUser";
 import { FaDownload } from "react-icons/fa";
+import { MdSearch } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-function NewExtraction() {
-	const [data, setData] = useState<IAnalysisData[]>([]);
-	const { inputValue, handleInputChange } = useSearch();
+import RowUser from "../../../components/Header/RowUser";
+import useSearch from "../../../hooks/useSearch";
+import { AppStore } from "../../../redux/store";
+import IAnalysisData from "../../../services/interfaces/IAnalysisData";
 
-	const getData = async () => {
-		const res = await services.getAnalysis();
-		const analysis = res.data;
+function NewExtraction() {
+	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
+	const { inputValue, handleInputChange } = useSearch();
+	const analysis = useSelector((store: AppStore) => store.analisis);
+
+	const getData = () => {
 		setData(analysis);
 	};
+
 	return (
 		<main className="main-index">
 			<div className="chart-container">
@@ -76,8 +78,9 @@ function NewExtraction() {
 								onChange={handleInputChange}
 								onFocus={() => document.querySelector(".search-icon")?.classList.add("hide-icon")}
 								onBlur={() => {
-									if (!inputValue)
+									if (!inputValue) {
 										document.querySelector(".search-icon")?.classList.remove("hide-icon");
+									}
 								}}
 							/>
 							<MdSearch className="search-icon" />

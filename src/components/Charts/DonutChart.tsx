@@ -1,5 +1,5 @@
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -48,16 +48,17 @@ export function DonutChart({
 	backgroundColors: string[];
 }) {
 	const donutData = {
-		labels: labels,
+		labels,
 		datasets: [
 			{
 				label: "Cantidad",
-				data: data,
+				data,
 				backgroundColor: backgroundColors,
 				borderColor: borderColors,
 				borderWidth: 1,
 			},
 		],
 	};
+
 	return <Doughnut data={donutData} options={options(title)} />;
 }

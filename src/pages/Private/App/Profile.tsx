@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { MdSearch } from "react-icons/md";
-import useSearch from "../../../hooks/useSearch";
-import IAnalysisData from "../../../services/interfaces/IAnalysisData";
-import * as services from "../../../services/GetDataServices";
+import { useSelector } from "react-redux";
+
 import RowUser from "../../../components/Header/RowUser";
+import useSearch from "../../../hooks/useSearch";
+import { AppStore } from "../../../redux/store";
+import IAnalysisData from "../../../services/interfaces/IAnalysisData";
 
 function Profile() {
-	const [data, setData] = useState<IAnalysisData[]>([]);
+	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
 	const { inputValue, handleInputChange } = useSearch();
+	const analysis = useSelector((store: AppStore) => store.analisis);
 
-	const getData = async () => {
-		const res = await services.getAnalysis();
-		const analysis = res.data;
+	const getData = () => {
 		setData(analysis);
 	};
+
 	return (
 		<main className="main-index">
 			<div className="chart-container">
@@ -34,8 +36,9 @@ function Profile() {
 							onChange={handleInputChange}
 							onFocus={() => document.querySelector(".search-icon")?.classList.add("hide-icon")}
 							onBlur={() => {
-								if (!inputValue)
+								if (!inputValue) {
 									document.querySelector(".search-icon")?.classList.remove("hide-icon");
+								}
 							}}
 						/>
 						<MdSearch className="search-icon" />

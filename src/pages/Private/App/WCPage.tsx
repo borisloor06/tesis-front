@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
 import "../../../styles/app.css";
-import WordCloud from "../../../components/Charts/WordCloud";
-import { MdNotifications, MdSearch, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
-import { HiUserCircle } from "react-icons/hi2";
-import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
-import { IoStatsChart } from "react-icons/io5";
+
+import React, { useEffect, useState } from "react";
+import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { PiArrowsClockwiseBold } from "react-icons/pi";
 import { VscSymbolKeyword } from "react-icons/vsc";
-import _ from "lodash";
-import useSearch from "../../../hooks/useSearch";
-import useKeywords from "../../../hooks/useKeywords";
-import RowUser from "../../../components/Header/RowUser";
+
+import WordCloud from "../../../components/Charts/WordCloud";
 import RowFilter from "../../../components/Header/RowFilter";
+import RowUser from "../../../components/Header/RowUser";
+import useKeywords from "../../../hooks/useKeywords";
 
 const KeywordDisplay = ({ wcKeywords }: any) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -67,7 +65,7 @@ const WCPage = () => {
 								/>
 								Total de Posts
 							</div>
-							<h3>{data.map((item) => item.total_posts)}</h3>
+							<h3>{data.total_posts}</h3>
 						</li>
 						<li>
 							<div>
@@ -80,7 +78,7 @@ const WCPage = () => {
 								/>
 								Total de Comentarios
 							</div>
-							<h3>{data.map((item) => item.total_comments)}</h3>
+							<h3>{data.total_comments}</h3>
 						</li>
 						<li>
 							<div>
@@ -93,7 +91,7 @@ const WCPage = () => {
 								/>
 								Total de autores
 							</div>
-							<h3>{data.map((item) => item.total_authors)}</h3>
+							<h3>{data.total_authors}</h3>
 						</li>
 						<li className="keywords">
 							<div className="t-fixed">

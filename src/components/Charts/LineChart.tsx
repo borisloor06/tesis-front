@@ -1,15 +1,15 @@
-import { Line } from "react-chartjs-2";
 import {
-	Chart as ChartJS,
 	CategoryScale,
+	Chart as ChartJS,
+	Filler,
+	Legend,
 	LinearScale,
-	PointElement,
 	LineElement,
+	PointElement,
 	Title,
 	Tooltip,
-	Legend,
-	Filler,
 } from "chart.js";
+import { Line } from "react-chartjs-2";
 
 ChartJS.register(
 	CategoryScale,
@@ -42,7 +42,7 @@ export default function LinesChart({
 	options?: any; // Puedes ajustar el tipo de datos según tus necesidades
 }) {
 	const chartData = {
-		labels: labels,
+		labels,
 		datasets: datasets.map((dataset) => ({
 			label: dataset.label,
 			data: dataset.data,

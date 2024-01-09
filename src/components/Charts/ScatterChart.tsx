@@ -1,10 +1,10 @@
 import {
 	Chart as ChartJS,
-	LinearScale,
-	PointElement,
-	LineElement,
-	Tooltip,
 	Legend,
+	LinearScale,
+	LineElement,
+	PointElement,
+	Tooltip,
 } from "chart.js";
 import { Scatter } from "react-chartjs-2";
 

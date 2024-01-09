@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import * as services from "../services/GetDataServices";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
+import { AppStore } from "../redux/store";
 
 const useAnalysis = () => {
 	const [vaderAnalysis, setVaderAnalysis] = useState<[string, number][]>([]);
 	const [transformerAnalysis, setTransformerAnalysis] = useState<[string, number][]>([]);
 	const [topicExtraction, setTopicExtraction] = useState<[string, number][]>([]);
 
-	const getAnalys = async () => {
-		const res = await services.getAnalysis();
-		const analysis = res.data;
+	const analysis = useSelector((store: AppStore) => store.analisis);
+	const GetAnalys = () => {
+		const vaderAnalysisData = analysis.vader_analysis.count;
+		const transformersAnalysisData = analysis.transformer_analysis.count;
+		const topicExtractionData = analysis.topic_extraction;
 
-		const vaderAnalysisData = analysis[0]?.vader_analysis.count;
-		const transformersAnalysisData = analysis[0]?.transformer_analysis.count;
-		const topicExtractionData = analysis[0]?.topic_extraction;
-
-		const vaderAnalysis: [string, number][] = Object.entries(vaderAnalysisData || {});
-		const transformerAnalysis: [string, number][] = Object.entries(transformersAnalysisData || {});
-		const topicExtraction: [string, number][] = Object.entries(topicExtractionData || {});
+		const vaderAnalysis = Object.entries(vaderAnalysisData);
+		const transformerAnalysis = Object.entries(transformersAnalysisData);
+		const topicExtraction = Object.entries(topicExtractionData);
 
 		setVaderAnalysis(vaderAnalysis);
 		setTransformerAnalysis(transformerAnalysis);
@@ -27,7 +27,7 @@ const useAnalysis = () => {
 		vaderAnalysis,
 		transformerAnalysis,
 		topicExtraction,
-		getAnalys,
+		getAnalys: GetAnalys,
 	};
 };
 

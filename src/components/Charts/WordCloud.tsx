@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import cloud from "d3-cloud";
+import React, { useEffect, useRef, useState } from "react";
 
 interface WordCloudProps {
 	words: { text: string; size: number }[];
@@ -13,7 +13,9 @@ const WordCloud: React.FC<WordCloudProps> = ({ words, width, height }) => {
 	const [cloudData, setCloudData] = useState<any[]>([]);
 
 	useEffect(() => {
-		if (words.length === 0) return;
+		if (words.length === 0) {
+			return;
+		}
 
 		const layout = cloud()
 			.size([width, height])

@@ -1,13 +1,13 @@
-import { Bar } from "react-chartjs-2";
 import {
-	Chart as ChartJS,
-	CategoryScale,
-	LinearScale,
 	BarElement,
+	CategoryScale,
+	Chart as ChartJS,
+	Legend,
+	LinearScale,
 	Title,
 	Tooltip,
-	Legend,
 } from "chart.js";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -15,20 +15,20 @@ const options = (title?: string) => ({
 	responsive: true,
 	indexAxis: "y" as const,
 	elements: {
-        bar: {
-            borderWidth: 2,
+		bar: {
+			borderWidth: 2,
 		},
 	},
 	plugins: {
-        legend: {
+		legend: {
 			display: false,
 			position: "right" as const,
 		},
 		title: {
-            display: false,
+			display: false,
 			text: title,
 		},
-        tooltip: {
+		tooltip: {
 			enabled: true,
 			padding: 10,
 			caretPadding: 10,
@@ -46,23 +46,23 @@ const options = (title?: string) => ({
 			titleSpacing: 10,
 		},
 	},
-    scales: {
-        y: {
-            position: "right" as const,
-            ticks: {
-                font: {
-                    size: 16
-                }
-            }
-        },
-        x: {
-            ticks: {
-                font: {
-                    size: 16
-                }
-            }
-        }
-    },
+	scales: {
+		y: {
+			position: "right" as const,
+			ticks: {
+				font: {
+					size: 16,
+				},
+			},
+		},
+		x: {
+			ticks: {
+				font: {
+					size: 16,
+				},
+			},
+		},
+	},
 });
 
 export function HBarChart({
@@ -77,13 +77,14 @@ export function HBarChart({
 	backG: string[];
 }) {
 	const chartData = {
-		labels: labels,
+		labels,
 		datasets: [
 			{
-				data: data,
+				data,
 				backgroundColor: backG,
-			}
+			},
 		],
 	};
+
 	return <Bar data={chartData} options={options(title)} />;
 }

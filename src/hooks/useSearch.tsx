@@ -5,6 +5,7 @@ const useSearch = () => {
 	const handleInputChange = (event: any) => {
 		setInputValue(event.target.value);
 	};
+
 	return {
 		inputValue,
 		handleInputChange,

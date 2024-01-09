@@ -35,10 +35,20 @@ interface ISentiments {
 	surprise: number;
 }
 
+interface CommentsByMonth {
+	[key: string]: number;
+}
+
+interface PostsByMonth {
+	[key: string]: number;
+}
+
 export default interface IAnalysisData {
 	average_author_comment_count: number;
 	average_comment_post_count: number;
 	average_comment_score: number;
+	comments_grouped: CommentsByMonth;
+	posts_grouped: PostsByMonth;
 	posts_dates: {
 		fecha_inicio: number;
 		fecha_fin: number;

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
 import "../../styles/app.css";
-import { MdDashboard, MdSettings, MdOutlineDoubleArrow } from "react-icons/md";
-import { FaCloud, FaHistory } from "react-icons/fa";
-import { TbHexagonLetterT } from "react-icons/tb";
+
+import React, { useEffect, useState } from "react";
 import { BiSolidAnalyse } from "react-icons/bi";
+import { FaCloud, FaHistory } from "react-icons/fa";
+import { MdDashboard, MdOutlineDoubleArrow, MdSettings } from "react-icons/md";
+import { TbHexagonLetterT } from "react-icons/tb";
+import { Link, useLocation } from "react-router-dom";
+
 import { Logout } from "../Logout";
 
 const Sidebar = () => {

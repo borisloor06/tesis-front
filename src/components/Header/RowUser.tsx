@@ -1,7 +1,6 @@
-import useSearch from "../../hooks/useSearch";
-import { MdNotifications, MdSearch } from "react-icons/md";
-import { HiUserCircle } from "react-icons/hi2";
 import { GiExtractionOrb } from "react-icons/gi";
+import { HiUserCircle } from "react-icons/hi2";
+import { MdNotifications } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 function RowUser() {
@@ -24,7 +23,7 @@ function RowUser() {
 						width: "2rem",
 						height: "2rem",
 					}}
-                    className="btn-notifications"
+					className="btn-notifications"
 				/>
 				<Link to="/private/profile" className="btn-profile">
 					<HiUserCircle

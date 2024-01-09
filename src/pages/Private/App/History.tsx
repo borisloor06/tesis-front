@@ -1,22 +1,20 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
 import {
 	MdAlignHorizontalLeft,
-	MdNotifications,
 	MdOutlineKeyboardDoubleArrowLeft,
 	MdOutlineKeyboardDoubleArrowRight,
-	MdSearch,
 } from "react-icons/md";
-import { HiUserCircle } from "react-icons/hi2";
-import useSearch from "../../../hooks/useSearch";
-import IAnalysisData from "../../../services/interfaces/IAnalysisData";
-import * as services from "../../../services/GetDataServices";
-import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
 import { VscSymbolKeyword } from "react-icons/vsc";
-import useKeywords from "../../../hooks/useKeywords";
+import { useSelector } from "react-redux";
+
 import { HBarChart } from "../../../components/Charts/HBarChart";
-import useAnalysis from "../../../hooks/useAnalysis";
-import { AreaChart } from "../../../components/Charts/AreaChart";
 import RowUser from "../../../components/Header/RowUser";
+import useAnalysis from "../../../hooks/useAnalysis";
+import useKeywords from "../../../hooks/useKeywords";
+import useSearch from "../../../hooks/useSearch";
+import { AppStore } from "../../../redux/store";
+import IAnalysisData from "../../../services/interfaces/IAnalysisData";
 
 function History() {
 	const [result, setResult] = useState(null);
@@ -26,11 +24,10 @@ function History() {
 	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
 		useKeywords();
 	const { topicExtraction, getAnalys } = useAnalysis();
-	const [data, setData] = useState<IAnalysisData[]>([]);
+	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
+	const analysis = useSelector((store: AppStore) => store.analisis);
 
-	const getData = async () => {
-		const res = await services.getAnalysis();
-		const analysis = res.data;
+	const getData = () => {
 		setData(analysis);
 	};
 
@@ -69,7 +66,7 @@ function History() {
 		};
 
 		// Attach the callback function as an event listener.
-		worker.current?.removeEventListener("message", onMessageReceived);
+		worker.current.removeEventListener("message", onMessageReceived);
 	});
 
 	const classify = useCallback((text: string) => {
@@ -105,7 +102,7 @@ function History() {
 							/>
 							Total de Posts
 						</div>
-						<h3>{data.map((item) => item.total_posts)}</h3>
+						<h3>{data.total_posts}</h3>
 					</li>
 					<li>
 						<div>
@@ -118,7 +115,7 @@ function History() {
 							/>
 							Total de Comentarios
 						</div>
-						<h3>{data.map((item) => item.total_comments)}</h3>
+						<h3>{data.total_comments}</h3>
 					</li>
 					<li>
 						<div>
@@ -131,7 +128,7 @@ function History() {
 							/>
 							Total de autores
 						</div>
-						<h3>{data.map((item) => item.total_authors)}</h3>
+						<h3>{data.total_authors}</h3>
 					</li>
 					<li>
 						<div>
@@ -154,7 +151,7 @@ function History() {
 				<ul className="row-second-topic">
 					<li className="statistics">
 						<div>
-							<MdAlignHorizontalLeft 
+							<MdAlignHorizontalLeft
 								style={{
 									marginRight: "1rem",
 									marginLeft: ".5rem",

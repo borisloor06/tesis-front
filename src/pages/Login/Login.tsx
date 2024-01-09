@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getMorty } from "../../services/auth.service";
-import { UserKey, createUser, resetUser } from "../../redux/states/user";
 import { Link, useNavigate } from "react-router-dom";
+
 import { PrivateRoutes, PublicRoutes } from "../../models";
-import { useEffect } from "react";
+import { createUser, resetUser, UserKey } from "../../redux/states/user";
+import { getMorty } from "../../services/auth.service";
 import { clearLocalStorage } from "../../utilities";
 
 function Login() {

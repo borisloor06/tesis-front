@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+
+import { AppStore } from "../redux/store";
 import IAnalysisData from "../services/interfaces/IAnalysisData";
-import * as services from "../services/GetDataServices";
 
 const useKeywords = () => {
-	const [data, setData] = useState<IAnalysisData[]>([]);
+	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
 	const [wcKeywords, setWcKeywords] = useState<[string, number][]>([]);
 	const [topKeywords, setTopKeywords] = useState<[string, number][]>([]);
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,15 +20,14 @@ const useKeywords = () => {
 		);
 	};
 
-	const getKeywords = async () => {
+	const analysis = useSelector((store: AppStore) => store.analisis);
+	const GetKeywords = () => {
 		try {
-			const res = await services.getAnalysis();
-			const analysis = res.data;
-			const commentKeywords = analysis[0]?.keywords?.comment;
-			const postKeywords = analysis[0]?.keywords?.posts;
+			const commentKeywords = analysis.keywords.comment;
+			const postKeywords = analysis.keywords.posts;
 
 			// Filtrar las 10 palabras con la puntuación más alta de los comentarios
-			const wcKeywords: [string, number][] = Object.entries(commentKeywords || {})
+			const wcKeywords: [string, number][] = Object.entries(commentKeywords)
 				.filter(
 					([word, score]) =>
 						isNaN(Number(word)) &&
@@ -37,13 +38,13 @@ const useKeywords = () => {
 				)
 				.sort(([, scoreA]: any, [, scoreB]: any) => scoreB - scoreA)
 				.slice(0, 60)
-				.map(([word, score], index) => [word, 60 - index]) as [string, number][];
+				.map(([word, score], index) => [word, 60 - index]);
 
 			// Filtrar las 10 palabras con la puntuación más alta de los títulos
-			const topKeywords: [string, number][] = Object.entries(postKeywords || {})
+			const topKeywords: [string, number][] = Object.entries(postKeywords)
 				.filter(([word, score]) => isNaN(Number(word)) && typeof score === "number")
 				.sort(([, scoreA]: any, [, scoreB]: any) => scoreB - scoreA)
-				.slice(0, 21) as [string, number][];
+				.slice(0, 21);
 
 			setTopKeywords(topKeywords);
 			setWcKeywords(wcKeywords);
@@ -52,11 +53,12 @@ const useKeywords = () => {
 			console.error("Error al obtener datos:", error);
 		}
 	};
+
 	return {
 		data,
 		wcKeywords,
 		topKeywords,
-        getKeywords,
+		getKeywords: GetKeywords,
 		handleNextWord,
 		handlePreviousWord,
 		currentIndex,

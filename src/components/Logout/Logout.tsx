@@ -1,9 +1,10 @@
+import { BiLogOut } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 import { PublicRoutes } from "../../models";
 import { resetUser, UserKey } from "../../redux/states/user";
 import { clearLocalStorage } from "../../utilities";
-import { BiLogOut } from "react-icons/bi";
 
 function Logout() {
 	const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Logout() {
 		navigate(PublicRoutes.LANDING, { replace: true });
 		console.log("Logged out");
 	};
+
 	return (
 		<li className="nav-item">
 			<button className="navBar nav-link text-white" onClick={logOut}>

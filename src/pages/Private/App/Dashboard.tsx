@@ -1,73 +1,80 @@
-import React, { useEffect, useState } from "react";
 import "../../../styles/app.css";
-import LineChart from "../../../components/Charts/LineChart";
-import * as services from "../../../services/GetDataServices";
-import IAnalysisData from "../../../services/interfaces/IAnalysisData";
-import IResumeData from "../../../services/interfaces/IResumeData";
+
+import React, { useEffect, useState } from "react";
+import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
+import { IoStatsChart } from "react-icons/io5";
 import {
+	MdDateRange,
 	MdOutlineKeyboardDoubleArrowLeft,
 	MdOutlineKeyboardDoubleArrowRight,
-	MdDateRange,
 } from "react-icons/md";
-import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
-import { IoStatsChart } from "react-icons/io5";
 import { VscSymbolKeyword } from "react-icons/vsc";
-import useKeywords from "../../../hooks/useKeywords";
+import { useSelector } from "react-redux";
+
+import LineChart from "../../../components/Charts/LineChart";
 import RowUser from "../../../components/Header/RowUser";
+import useKeywords from "../../../hooks/useKeywords";
+import { AppStore } from "../../../redux/store";
+import IResumeData from "../../../services/interfaces/IResumeData";
 
 const Dashboard = () => {
 	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
 		useKeywords();
-	const [data, setData] = useState<IAnalysisData[]>([]);
 	const [resumeData, setResumeData] = useState<IResumeData[]>([]);
-
-	const getData = async () => {
-		const res = await services.getAnalysis();
-		const analysis = res.data;
-		setData(analysis);
-	};
+	const analysis = useSelector((store: AppStore) => store.analisis);
 
 	// const getResumeData = async () => {
 	// 	const res = await services.getResumeData();
-	// 	const resume = res.data;
+	// 	const resume = res.analysis;
 	// 	console.log(resume);
-		
+
 	// 	setResumeData(resume);
 	// };
 
-	// const posts_count = resumeData.map((item) => item.posts);
+	// const posts_count = resumeData.posts;
 	// console.log(posts_count);
-	
 
 	const beneficios = [0, 56, 20, 36, 80, 40, 30, 60, 25, 30, 12, 60];
-    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+	const meses = [
+		"Enero",
+		"Febrero",
+		"Marzo",
+		"Abril",
+		"Mayo",
+		"Junio",
+		"Julio",
+		"Agosto",
+		"Septiembre",
+		"Octubre",
+		"Noviembre",
+		"Diciembre",
+	];
 
-    const myDatasets = [
-        {
-            label: 'Comentarios',
-            data: beneficios,
+	const myDatasets = [
+		{
+			label: "Comentarios",
+			analysis: beneficios,
 			tension: 0.3,
-            fill: true,
-            borderColor: '#40c639',
-            backgroundColor: '#40c63972',
-            pointRadius: 3,
-            pointBorderColor: '#3995c6',
-            pointBackgroundColor: '#3995c6aa',
-        },
-        {
-            label: 'Posts',
-            data: [20, 25, 60, 65, 45, 10, 0, 25, 35, 7, 20, 25],
+			fill: true,
+			borderColor: "#40c639",
+			backgroundColor: "#40c63972",
+			pointRadius: 3,
+			pointBorderColor: "#3995c6",
+			pointBackgroundColor: "#3995c6aa",
+		},
+		{
+			label: "Posts",
+			analysis: [20, 25, 60, 65, 45, 10, 0, 25, 35, 7, 20, 25],
 			tension: 0.3,
-            borderColor: '#c63940',
-            backgroundColor: '#c6394072',
-            pointRadius: 3,
-            pointBorderColor: '#c63940',
-            pointBackgroundColor: '#c63940aa',
-        },
-    ];
+			borderColor: "#c63940",
+			backgroundColor: "#c6394072",
+			pointRadius: 3,
+			pointBorderColor: "#c63940",
+			pointBackgroundColor: "#c63940aa",
+		},
+	];
 
 	useEffect(() => {
-		getData();
 		getKeywords();
 	}, []);
 
@@ -92,7 +99,7 @@ const Dashboard = () => {
 							/>
 							Total de Posts
 						</div>
-						<h3>{data.map((item) => item.total_posts)}</h3>
+						<h3>{analysis.total_posts}</h3>
 					</li>
 					<li>
 						<div>
@@ -105,7 +112,7 @@ const Dashboard = () => {
 							/>
 							Total de Comentarios
 						</div>
-						<h3>{data.map((item) => item.total_comments)}</h3>
+						<h3>{analysis.total_comments}</h3>
 					</li>
 					<li>
 						<div>
@@ -118,7 +125,7 @@ const Dashboard = () => {
 							/>
 							Total de autores
 						</div>
-						<h3>{data.map((item) => item.total_authors)}</h3>
+						<h3>{analysis.total_authors}</h3>
 					</li>
 					<li>
 						<div>
@@ -152,7 +159,7 @@ const Dashboard = () => {
 								/>
 								Media de comentarios por Post
 							</div>
-							<h3>{data.map((item) => parseFloat(item.average_comment_post_count.toFixed(2)))}</h3>{" "}
+							<h3>{analysis.average_comment_post_count.toFixed(2)}</h3>{" "}
 						</li>
 						<li>
 							<div>
@@ -165,7 +172,7 @@ const Dashboard = () => {
 								/>
 								Puntuación media por comentario
 							</div>
-							<h3>{data.map((item) => parseFloat(item.average_comment_score.toFixed(2)))}</h3>
+							<h3>{analysis.average_comment_score.toFixed(2)}</h3>
 						</li>
 						<li>
 							<div>
@@ -178,9 +185,7 @@ const Dashboard = () => {
 								/>
 								Media de comentarios por autor
 							</div>
-							<h3>
-								{data.map((item) => parseFloat(item.average_author_comment_count.toFixed(2)))}
-							</h3>
+							<h3>{parseFloat(analysis.average_author_comment_count.toFixed(2))}</h3>
 						</li>
 					</div>
 					<li className="statistics">
@@ -195,9 +200,7 @@ const Dashboard = () => {
 								/>
 								<h6>
 									Fecha Inicio:{" "}
-									{data.map((item) =>
-										new Date(item.comments_dates.fecha_inicio).toLocaleDateString("es-ES")
-									)}
+									{new Date(analysis.comments_dates.fecha_inicio).toLocaleDateString("es-ES")}
 								</h6>
 							</div>
 							<div>
@@ -211,9 +214,7 @@ const Dashboard = () => {
 								/>
 								<h6>
 									Fecha Fin:{" "}
-									{data.map((item) =>
-										new Date(item.comments_dates.fecha_fin).toLocaleDateString("es-ES")
-									)}
+									{new Date(analysis.comments_dates.fecha_fin).toLocaleDateString("es-ES")}
 								</h6>
 							</div>
 						</div>

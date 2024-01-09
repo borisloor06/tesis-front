@@ -1,15 +1,16 @@
-import { useState, Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import Landing from "./pages/Login/Landing";
 import "./styles/global.css";
-import { PrivateRoutes, PublicRoutes } from "./models";
-import { AuthGuard } from "./guards";
-import { RoutesWithNotFound } from "./utilities";
+
+import { lazy, Suspense, useState } from "react";
 import { Provider } from "react-redux";
-import store from "./redux/store";
+import { BrowserRouter, Navigate, Route } from "react-router-dom";
+
+import Header from "./components/Header/Header";
 import Loader from "./components/Loader/Loader";
+import { AuthGuard } from "./guards";
+import { PrivateRoutes, PublicRoutes } from "./models";
+import Landing from "./pages/Login/Landing";
+import store from "./redux/store";
+import { RoutesWithNotFound } from "./utilities";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const Private = lazy(() => import("./pages/Private/Private"));

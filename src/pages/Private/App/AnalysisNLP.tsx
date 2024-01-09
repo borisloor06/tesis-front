@@ -1,24 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
 import "../../../styles/app.css";
-import BarsChart from "../../../components/Charts/VBarChart";
-import { DonutChart } from "../../../components/Charts/DonutChart";
-import * as services from "../../../services/GetDataServices";
-import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+
+import React, { useEffect, useState } from "react";
+import { FaCommentAlt, FaReddit, FaUserEdit } from "react-icons/fa";
 import {
+	MdDonutLarge,
 	MdOutlineKeyboardDoubleArrowLeft,
 	MdOutlineKeyboardDoubleArrowRight,
-	MdOutlineSentimentSatisfied,
 	MdOutlineSentimentDissatisfied,
 	MdOutlineSentimentNeutral,
-	MdDonutLarge,
+	MdOutlineSentimentSatisfied,
 } from "react-icons/md";
-import { FaReddit, FaCommentAlt, FaUserEdit } from "react-icons/fa";
 import { VscSymbolKeyword } from "react-icons/vsc";
+import { useSelector } from "react-redux";
+
+import { DonutChart } from "../../../components/Charts/DonutChart";
+import BarsChart from "../../../components/Charts/VBarChart";
+import RowFilter from "../../../components/Header/RowFilter";
+import RowUser from "../../../components/Header/RowUser";
+import useAnalysis from "../../../hooks/useAnalysis";
 import useKeywords from "../../../hooks/useKeywords";
 import useSentiments from "../../../hooks/useSentiments";
-import useAnalysis from "../../../hooks/useAnalysis";
-import RowUser from "../../../components/Header/RowUser";
-import RowFilter from "../../../components/Header/RowFilter";
+import { AppStore } from "../../../redux/store";
+import IAnalysisData from "../../../services/interfaces/IAnalysisData";
 
 const AnalysisNLP = () => {
 	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
@@ -27,15 +30,14 @@ const AnalysisNLP = () => {
 		useSentiments();
 	const { vaderAnalysis, transformerAnalysis, getAnalys } = useAnalysis();
 
-	const [data, setData] = useState<IAnalysisData[]>([]);
+	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
 	const [vaderAnalysisTC, setVaderAnalysisTC] = useState<number>(0);
 	const [transformerAnalysisTC, setTransformerAnalysisTC] = useState<number>(0);
 
-	const getData = async () => {
-		const res = await services.getAnalysis();
-		const analysis = res.data;
-		const vaderAnalysisTC = analysis[0]?.vader_analysis.total_average;
-		const transformerAnalysisTC = analysis[0]?.transformer_analysis.total_average;
+	const analysis = useSelector((store: AppStore) => store.analisis);
+	const GetData = () => {
+		const vaderAnalysisTC = analysis.vader_analysis.total_average;
+		const transformerAnalysisTC = analysis.transformer_analysis.total_average;
 		setData(analysis);
 		setVaderAnalysisTC(vaderAnalysisTC);
 		setTransformerAnalysisTC(transformerAnalysisTC);
@@ -62,7 +64,7 @@ const AnalysisNLP = () => {
 	const transformerAnalysisLabels = transformerAnalysis.map(([label, score]) => label);
 
 	useEffect(() => {
-		getData();
+		GetData();
 		getKeywords();
 		getSentiments();
 		getAnalys();
@@ -87,7 +89,7 @@ const AnalysisNLP = () => {
 							/>
 							Total de Posts
 						</div>
-						<h3>{data.map((item) => item.total_posts)}</h3>
+						<h3>{data.total_posts}</h3>
 					</li>
 					<li>
 						<div>
@@ -100,7 +102,7 @@ const AnalysisNLP = () => {
 							/>
 							Total de Comentarios
 						</div>
-						<h3>{data.map((item) => item.total_comments)}</h3>
+						<h3>{data.total_comments}</h3>
 					</li>
 					<li>
 						<div>
@@ -113,7 +115,7 @@ const AnalysisNLP = () => {
 							/>
 							Total de autores
 						</div>
-						<h3>{data.map((item) => item.total_authors)}</h3>
+						<h3>{data.total_authors}</h3>
 					</li>
 					<li>
 						<div>

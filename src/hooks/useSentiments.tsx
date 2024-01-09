@@ -1,15 +1,15 @@
 import { useState } from "react";
-import * as services from "../services/GetDataServices";
+import { useSelector } from "react-redux";
+
+import { AppStore } from "../redux/store";
 
 const useSentiments = () => {
 	const [positiveSentiments, setPositiveSentiments] = useState<[string, number][]>([]);
 	const [negativeSentiments, setNegativeSentiments] = useState<[string, number][]>([]);
 	const [neutralSentiments, setNeutralSentiments] = useState<[string, number][]>([]);
-	const getSentiments = async () => {
-		const res = await services.getAnalysis();
-		const analysis = res.data;
-
-		const sentimentsData = analysis[0]?.emotion_analysis.average;
+	const analysis = useSelector((store: AppStore) => store.analisis);
+	const GetSentiments = () => {
+		const sentimentsData = analysis.emotion_analysis.average;
 
 		const positiveSentiments: [string, number][] = [];
 		const negativeSentiments: [string, number][] = [];
@@ -46,7 +46,7 @@ const useSentiments = () => {
 			surprise: "sorpresa",
 		};
 
-		for (const [key, value] of Object.entries(sentimentsData || {})) {
+		for (const [key, value] of Object.entries(sentimentsData)) {
 			const translatedKey = translations[key];
 			if (translatedKey) {
 				if (
@@ -94,7 +94,7 @@ const useSentiments = () => {
 		positiveSentiments,
 		negativeSentiments,
 		neutralSentiments,
-		getSentiments,
+		getSentiments: GetSentiments,
 	};
 };
 

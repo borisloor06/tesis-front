@@ -1,5 +1,5 @@
+import { Chart as ChartJS, Legend, LinearScale, PointElement, Tooltip } from "chart.js";
 import { Bubble } from "react-chartjs-2";
-import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
