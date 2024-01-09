@@ -27,7 +27,7 @@ const grey = {
 };
 
 function useIsDarkMode() {
-	return true;
+	return false;
 }
 
 export function Styles() {

@@ -33,27 +33,18 @@ const Dashboard = () => {
 
 	// const posts_count = resumeData.posts;
 	// console.log(posts_count);
+	const commentsDates = Object.entries(analysis.comments_grouped.comments_count);
+	const commentsLabels = commentsDates.map(([label, score]) => label);
+	const commentsCount = commentsDates.map(([label, count]) => count);
 
-	const beneficios = [0, 56, 20, 36, 80, 40, 30, 60, 25, 30, 12, 60];
-	const meses = [
-		"Enero",
-		"Febrero",
-		"Marzo",
-		"Abril",
-		"Mayo",
-		"Junio",
-		"Julio",
-		"Agosto",
-		"Septiembre",
-		"Octubre",
-		"Noviembre",
-		"Diciembre",
-	];
+	const postsDates = Object.entries(analysis.posts_grouped.posts_count);
+	const postsLabels = postsDates.map(([label, score]) => label);
+	const postsCount = postsDates.map(([label, count]) => count);
 
 	const myDatasets = [
 		{
 			label: "Comentarios",
-			analysis: beneficios,
+			analysis: commentsCount,
 			tension: 0.3,
 			fill: true,
 			borderColor: "#40c639",
@@ -64,7 +55,7 @@ const Dashboard = () => {
 		},
 		{
 			label: "Posts",
-			analysis: [20, 25, 60, 65, 45, 10, 0, 25, 35, 7, 20, 25],
+			analysis: postsCount,
 			tension: 0.3,
 			borderColor: "#c63940",
 			backgroundColor: "#c6394072",
@@ -219,7 +210,13 @@ const Dashboard = () => {
 							</div>
 						</div>
 						{/*Este gráfico está de muestra, habría que modificar para que aparezca la cantidad de comentarios y de posts por mes */}
-						<LineChart labels={meses} datasets={myDatasets} />
+						<LineChart
+							labels={commentsLabels}
+							datasets={myDatasets.map((dataset) => ({
+								...dataset,
+								data: dataset.analysis, // Add the 'data' property with the 'analysis' value
+							}))}
+						/>
 					</li>
 				</ul>
 			</div>

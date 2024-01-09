@@ -45,6 +45,9 @@ const Sidebar = () => {
 			case "/private/history":
 				setCurrentTabName("Comentarios");
 				break;
+			case "/private/posts":
+				setCurrentTabName("Posts");
+				break;
 			case "/private/extraction":
 				setCurrentTabName("Nueva Extracción");
 				break;
@@ -176,6 +179,25 @@ const Sidebar = () => {
 							}}
 						/>
 						Comentarios
+					</Link>
+				</li>
+				<li className="nav-item">
+					<Link
+						to="/private/posts"
+						className={`navBar nav-link text-white ${currentTabName === "Posts" ? "active" : ""}`}
+						onClick={() => {
+							handleTabClick("Posts");
+						}}
+					>
+						<FaHistory
+							style={{
+								marginRight: "1rem",
+								width: "1.2rem",
+								height: "1.5rem",
+								marginTop: "-.3rem",
+							}}
+						/>
+						Posts
 					</Link>
 				</li>
 			</ul>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 
-import { createAnalisis, resetAnalisis } from "../../redux/states/analisis";
+import { createAnalisis } from "../../redux/states/analisis";
 import * as services from "../../services/GetDataServices";
 import IAnalysisData from "../../services/interfaces/IAnalysisData";
 import Loader from "../Loader/Loader";
@@ -13,7 +13,6 @@ function RowFilter({ refreshContent }) {
 	const [loading, setLoading] = useState(false);
 
 	const getAnalisis = async (startDate: string, endDate: string) => {
-		dispatch(resetAnalisis());
 		try {
 			setLoading(true);
 			const analysisResponse = await services.getAnalysisByFilter(startDate, endDate);
@@ -92,7 +91,9 @@ function RowFilter({ refreshContent }) {
 						<input type="date" name="date-end" id="date-end" />
 					</div>
 				</div>
-				<button onClick={handleFilterClick} disabled={loading}>Aplicar</button>
+				<button onClick={handleFilterClick} disabled={loading}>
+					Aplicar
+				</button>
 			</li>
 		</>
 	);

@@ -4,17 +4,17 @@ import { useSelector } from "react-redux";
 
 import { AppStore } from "../../../redux/store";
 import * as services from "../../../services/GetDataServices";
-import IComment from "../../../services/interfaces/IComments";
+import IPost from "../../../services/interfaces/IPosts";
 import { Styles } from "./HistoryStyles";
 
-function History() {
+function Posts() {
 	const analysis = useSelector((store: AppStore) => store.analisis);
-	const [comentarios, setComentarios] = useState([] as IComment[]);
+	const [posts, setPosts] = useState([] as IPost[]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [total, setTotal] = useState(0);
 	// Avoid a layout jump when reaching the last page with empty comments.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - posts.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -25,18 +25,18 @@ function History() {
 		setPage(0);
 	};
 
-	const getComments = async () => {
+	const getPosts = async () => {
 		const offset = page * rowsPerPage;
-		const response = await services.getComments(rowsPerPage, offset);
+		const response = await services.getPosts(rowsPerPage, offset);
 
 		return response.data;
 	};
 
 	useEffect(() => {
-		getComments()
+		getPosts()
 			.then((response) => {
-				const { comments, total } = response;
-				setComentarios(comments);
+				const { posts, total } = response;
+				setPosts(posts);
 				setTotal(total);
 			})
 			.catch((error) => console.log(error));
@@ -49,21 +49,27 @@ function History() {
 					<tr>
 						<th>id</th>
 						<th>Autor</th>
-						<th className="w-25">Comentario</th>
-						<th>Post</th>
+						<th>Subreddit</th>
+						<th>Puntuación</th>
+						<th>URL</th>
+						<th>Cantidad Comentarios</th>
 						<th>Fecha Creación</th>
 					</tr>
 				</thead>
 				<tbody>
-					{comentarios.length &&
-						comentarios.map((row) => (
+					{posts.length &&
+						posts.map((row) => (
 							<tr key={row.id}>
 								<td>{row.id}</td>
 								<td align="right">{row.author}</td>
-								<td className="overflow-hidden w-25" align="right">
-									{row.body}
+								<td align="right">{row.subreddit}</td>
+								<td align="right">{row.score}</td>
+								<td align="right">
+									<a href={row.url} target="_blank" rel="noreferrer">
+										{row.url}
+									</a>
 								</td>
-								<td align="right">{row.subreddit_id}</td>
+								<td align="right">{row.num_comments}</td>
 								<td align="right">{row.created_date}</td>
 							</tr>
 						))}
@@ -96,4 +102,4 @@ function History() {
 	);
 }
 
-export default History;
+export default Posts;

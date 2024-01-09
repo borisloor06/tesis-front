@@ -12,3 +12,8 @@ export default interface IPost {
 	upvote_ratio: number;
 	created_date: string;
 }
+
+export interface ResponsePosts {
+	posts: IPost[];
+	total: number;
+}

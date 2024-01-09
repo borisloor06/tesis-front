@@ -10,6 +10,7 @@ const AnalysisNLP = lazy(() => import("./App/AnalysisNLP"));
 const WCPage = lazy(() => import("./App/WCPage"));
 const Transformers = lazy(() => import("./App/Transformers"));
 const History = lazy(() => import("./App/History"));
+const Posts = lazy(() => import("./App/Posts"));
 const Settings = lazy(() => import("./App/Settings"));
 const NewExtraction = lazy(() => import("./App/NewExtraction"));
 const Profile = lazy(() => import("./App/Profile"));
@@ -23,6 +24,7 @@ function Private() {
 				<Route path={PrivateRoutes.WC_PAGE} element={<WCPage />} />
 				<Route path={PrivateRoutes.TRANSFORMERS} element={<Transformers />} />
 				<Route path={PrivateRoutes.HISTORY} element={<History />} />
+				<Route path={PrivateRoutes.POSTS} element={<Posts />} />
 				<Route path={PrivateRoutes.SETTINGS} element={<Settings />} />
 				<Route path={PrivateRoutes.EXTRACTION} element={<NewExtraction />} />
 				<Route path={PrivateRoutes.PROFILE} element={<Profile />} />

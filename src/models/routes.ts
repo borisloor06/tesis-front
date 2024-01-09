@@ -10,6 +10,7 @@ export const PrivateRoutes = {
 	HOME: "home",
 	DASHBOARD: "dashboard",
 	HISTORY: "history",
+	POSTS: "posts",
 	TRANSFORMERS: "transformers",
 	ANALYSIS_NLP: "analysis-nlp",
 	WC_PAGE: "wc-page",

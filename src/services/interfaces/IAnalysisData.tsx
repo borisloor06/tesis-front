@@ -43,12 +43,21 @@ interface PostsByMonth {
 	[key: string]: number;
 }
 
+interface CommentsDates {
+	comments_count: CommentsByMonth;
+	posts_count: PostsByMonth;
+}
+
+interface PostsDates {
+	posts_count: PostsByMonth;
+}
+
 export default interface IAnalysisData {
 	average_author_comment_count: number;
 	average_comment_post_count: number;
 	average_comment_score: number;
-	comments_grouped: CommentsByMonth;
-	posts_grouped: PostsByMonth;
+	comments_grouped: CommentsDates;
+	posts_grouped: PostsDates;
 	posts_dates: {
 		fecha_inicio: number;
 		fecha_fin: number;

@@ -19,3 +19,8 @@ export default interface IComment {
 	author: string;
 	created_date: string;
 }
+
+export interface ResponseComments {
+	comments: IComment[];
+	total: number;
+}
