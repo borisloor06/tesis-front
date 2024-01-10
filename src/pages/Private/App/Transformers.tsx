@@ -15,6 +15,7 @@ import useKeywords from "../../../hooks/useKeywords";
 import useSearch from "../../../hooks/useSearch";
 import { AppStore } from "../../../redux/store";
 import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+import SettingsStatus from "./SettingsStatus";
 
 function Transformers() {
 	const [result, setResult] = useState(null);
@@ -91,6 +92,9 @@ function Transformers() {
 		<main className="main-index">
 			<div className="chart-container">
 				{/* <RowUser /> */}
+				<ul className="d-flex flex-row-reverse">
+					<SettingsStatus />
+				</ul>
 				<ul className="row-header d-flex justify-content-center">
 					<RowFilter refreshContent={refreshContent} />
 				</ul>

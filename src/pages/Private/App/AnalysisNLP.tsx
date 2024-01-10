@@ -21,6 +21,7 @@ import useKeywords from "../../../hooks/useKeywords";
 import useSentiments from "../../../hooks/useSentiments";
 import { AppStore } from "../../../redux/store";
 import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+import SettingsStatus from "./SettingsStatus";
 
 const AnalysisNLP = () => {
 	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
@@ -85,6 +86,9 @@ const AnalysisNLP = () => {
 		<main className="main-index">
 			<div className="chart-container">
 				{/* <RowUser /> */}
+				<ul className="d-flex flex-row-reverse">
+					<SettingsStatus />
+				</ul>
 				<ul className="row-header">
 					<RowFilter refreshContent={refreshContent} />
 				</ul>

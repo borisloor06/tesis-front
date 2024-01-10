@@ -11,6 +11,7 @@ import WordCloud from "../../../components/Charts/WordCloud";
 import RowFilter from "../../../components/Header/RowFilter";
 import useKeywords from "../../../hooks/useKeywords";
 import { AppStore } from "../../../redux/store";
+import SettingsStatus from "./SettingsStatus";
 
 const KeywordDisplay = ({ wcKeywords }: any) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -52,6 +53,9 @@ const WCPage = () => {
 		<main className="main-index">
 			<div className="chart-container main-word-cloud">
 				{/* <RowUser /> */}
+				<ul className="d-flex flex-row-reverse">
+					<SettingsStatus />
+				</ul>
 				<ul className="row-header">
 					<RowFilter refreshContent={refreshContent} />
 					<div onClick={handleButtonClick}>

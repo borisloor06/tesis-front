@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 
 import { useConfig } from "../../../Config/Config";
 import { fetchData } from "../../../services/GetDataServices";
+import SettingsStatus from "./SettingsStatus";
 
 function Settings() {
 	const { globalConfig, updateConfig } = useConfig();
@@ -44,19 +45,7 @@ function Settings() {
 						<div className="card">
 							<div className="card-body">
 								<h5 className="card-title">Configuración activa</h5>
-								<p className="card-text">
-									{devEnv ? (
-										<>
-											<span className="badge bg-warning text-dark">DEV</span>
-											<span className="badge bg-secondary text-light">{urlDev}</span>
-										</>
-									) : (
-										<>
-											<span className="badge bg-success text-light">PROD</span>
-											<span className="badge bg-secondary text-light">{urlProd}</span>
-										</>
-									)}
-								</p>
+								<SettingsStatus />
 							</div>
 						</div>
 						{/* formulario para editar la configuracion */}

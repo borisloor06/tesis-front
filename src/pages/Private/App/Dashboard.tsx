@@ -15,6 +15,7 @@ import LineChart from "../../../components/Charts/LineChart";
 import useKeywords from "../../../hooks/useKeywords";
 import { AppStore } from "../../../redux/store";
 import IResumeData from "../../../services/interfaces/IResumeData";
+import SettingsStatus from "./SettingsStatus";
 
 const Dashboard = () => {
 	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
@@ -72,6 +73,9 @@ const Dashboard = () => {
 		<main className="main-index">
 			<div className="chart-container">
 				{/* <RowUser /> */}
+				<ul className="d-flex flex-row-reverse">
+					<SettingsStatus />
+				</ul>
 				<ul className="row-header d-flex justify-content-center">
 					<li>
 						<h3>Datos de la extracción</h3>

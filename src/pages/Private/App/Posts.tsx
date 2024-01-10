@@ -10,6 +10,7 @@ import { AppStore } from "../../../redux/store";
 import { fetchData } from "../../../services/GetDataServices";
 import IPost, { ResponsePosts } from "../../../services/interfaces/IPosts";
 import { Styles } from "./HistoryStyles";
+import SettingsStatus from "./SettingsStatus";
 
 function Posts() {
 	const analysis = useSelector((store: AppStore) => store.analisis);
@@ -52,6 +53,9 @@ function Posts() {
 
 	return (
 		<main className="main-index chart-container w-100 TablePaginationIntroductionDemo ">
+			<ul className="d-flex flex-row-reverse">
+				<SettingsStatus />
+			</ul>
 			<div className="row-header d-flex justify-content-center mt-2">
 				<h3>Post de Reddit r/ChatGpt</h3>
 			</div>
@@ -68,7 +72,7 @@ function Posts() {
 					</tr>
 				</thead>
 				<tbody>
-					{posts.length ? (
+					{posts?.length ? (
 						posts.map((row) => (
 							<tr key={row.id}>
 								<td>{row.id}</td>
@@ -81,7 +85,7 @@ function Posts() {
 									</a>
 								</td>
 								<td className="text-right">{row.num_comments}</td>
-								<td className="text-right">{row.created_date}</td>
+								<td className="text-right">{new Date(row.created * 1000).toLocaleString()}</td>
 							</tr>
 						))
 					) : (

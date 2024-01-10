@@ -10,6 +10,7 @@ import { AppStore } from "../../../redux/store";
 import { fetchData } from "../../../services/GetDataServices";
 import IComment, { ResponseComments } from "../../../services/interfaces/IComments";
 import { Styles } from "./HistoryStyles";
+import SettingsStatus from "./SettingsStatus";
 
 function History() {
 	const analysis = useSelector((store: AppStore) => store.analisis);
@@ -19,7 +20,7 @@ function History() {
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [total, setTotal] = useState(0);
 	// Avoid a layout jump when reaching the last page with empty comments.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios?.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -49,6 +50,9 @@ function History() {
 
 	return (
 		<main className="main-index chart-container w-100 TablePaginationIntroductionDemo">
+			<ul className="d-flex flex-row-reverse">
+				<SettingsStatus />
+			</ul>
 			<div className="row-header d-flex justify-content-center mt-2">
 				<h3>Commentarios de Reddit r/ChatGpt</h3>
 			</div>
@@ -63,7 +67,7 @@ function History() {
 					</tr>
 				</thead>
 				<tbody>
-					{comentarios.length &&
+					{comentarios?.length ? (
 						comentarios.map((row) => (
 							<tr key={row.id}>
 								<td>{row.id}</td>
@@ -74,7 +78,12 @@ function History() {
 								<td align="right">{row.subreddit_id}</td>
 								<td align="right">{row.created_date}</td>
 							</tr>
-						))}
+						))
+					) : (
+						<tr>
+							<td colSpan={7}>No hay datos</td>
+						</tr>
+					)}
 				</tbody>
 				<tfoot>
 					<tr>

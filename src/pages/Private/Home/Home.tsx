@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 
 import Sidebar from "../../../components/Header/Sidebar";
 import Loader from "../../../components/Loader/Loader";
-import { createAnalisis } from "../../../redux/states/analisis";
+import { createAnalisis, resetAnalisis } from "../../../redux/states/analisis";
 import { fetchData } from "../../../services/GetDataServices";
 import IAnalysisData from "../../../services/interfaces/IAnalysisData";
 
@@ -30,7 +30,10 @@ function Home() {
 					dispatch(createAnalisis(analysisData[0]));
 				}
 			})
-			.catch((error) => console.log(error))
+			.catch((error) => {
+				dispatch(resetAnalisis());
+				console.log(error);
+			})
 			.finally(() => setLoading(false));
 	}, [dispatch]);
 
