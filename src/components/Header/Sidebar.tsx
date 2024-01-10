@@ -7,8 +7,6 @@ import { MdDashboard, MdOutlineDoubleArrow, MdSettings } from "react-icons/md";
 import { TbHexagonLetterT } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 
-import { Logout } from "../Logout";
-
 const Sidebar = () => {
 	const [currentTabName, setCurrentTabName] = useState("Dashboard");
 	const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
@@ -203,7 +201,7 @@ const Sidebar = () => {
 			</ul>
 			<hr></hr>
 			<ul className="nav nav-pills flex-column">
-				{/* <li className="nav-item">
+				<li className="nav-item">
 					<Link
 						to="/private/settings"
 						className={`navBar nav-link text-white ${
@@ -223,7 +221,7 @@ const Sidebar = () => {
 						/>
 						Configuraciones
 					</Link>
-				</li> */}
+				</li>
 				<li className="nav-item">
 					<Link to="/landing" className="navBar nav-link text-white">
 						<MdOutlineDoubleArrow

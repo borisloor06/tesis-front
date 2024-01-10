@@ -1,20 +1,25 @@
 import { TablePagination } from "@mui/base/TablePagination";
+import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import FirstPageRoundedIcon from "@mui/icons-material/FirstPageRounded";
+import LastPageRoundedIcon from "@mui/icons-material/LastPageRounded";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { AppStore } from "../../../redux/store";
-import * as services from "../../../services/GetDataServices";
-import IComment from "../../../services/interfaces/IComments";
+import { fetchData } from "../../../services/GetDataServices";
+import IComment, { ResponseComments } from "../../../services/interfaces/IComments";
 import { Styles } from "./HistoryStyles";
 
 function History() {
 	const analysis = useSelector((store: AppStore) => store.analisis);
+	const { getComments } = fetchData();
 	const [comentarios, setComentarios] = useState([] as IComment[]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [total, setTotal] = useState(0);
 	// Avoid a layout jump when reaching the last page with empty comments.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios?.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -25,15 +30,15 @@ function History() {
 		setPage(0);
 	};
 
-	const getComments = async () => {
+	const getComment = async () => {
 		const offset = page * rowsPerPage;
-		const response = await services.getComments(rowsPerPage, offset);
+		const response = await getComments(rowsPerPage, offset);
 
-		return response.data;
+		return response.data as ResponseComments;
 	};
 
 	useEffect(() => {
-		getComments()
+		getComment()
 			.then((response) => {
 				const { comments, total } = response;
 				setComentarios(comments);
@@ -43,8 +48,11 @@ function History() {
 	}, [page, rowsPerPage]);
 
 	return (
-		<main className="main-index chart-container w-100">
-			<table aria-label="custom pagination table" className="d-table">
+		<main className="main-index chart-container w-100 TablePaginationIntroductionDemo">
+			<div className="row-header d-flex justify-content-center mt-2">
+				<h3>Commentarios de Reddit r/ChatGpt</h3>
+			</div>
+			<table aria-label="custom pagination table" className="d-table mt-5">
 				<thead>
 					<tr>
 						<th>id</th>
@@ -55,7 +63,7 @@ function History() {
 					</tr>
 				</thead>
 				<tbody>
-					{comentarios?.length &&
+					{comentarios.length &&
 						comentarios.map((row) => (
 							<tr key={row.id}>
 								<td>{row.id}</td>
@@ -72,6 +80,7 @@ function History() {
 					<tr>
 						<TablePagination
 							rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+							className="CustomTablePagination"
 							colSpan={5}
 							count={total}
 							rowsPerPage={rowsPerPage}
@@ -83,6 +92,12 @@ function History() {
 								actions: {
 									showFirstButton: true,
 									showLastButton: true,
+									slots: {
+										firstPageIcon: FirstPageRoundedIcon,
+										lastPageIcon: LastPageRoundedIcon,
+										nextPageIcon: ChevronRightRoundedIcon,
+										backPageIcon: ChevronLeftRoundedIcon,
+									},
 								},
 							}}
 							onPageChange={handleChangePage}

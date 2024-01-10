@@ -1,102 +1,115 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MdAlignHorizontalLeft } from "react-icons/md";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
 
-import useAnalysis from "../../../hooks/useAnalysis";
-import useKeywords from "../../../hooks/useKeywords";
-import useSearch from "../../../hooks/useSearch";
-import { AppStore } from "../../../redux/store";
-import IAnalysisData from "../../../services/interfaces/IAnalysisData";
+import { useConfig } from "../../../Config/Config";
+import { fetchData } from "../../../services/GetDataServices";
 
 function Settings() {
-	const [result, setResult] = useState(null);
-	const [ready, setReady] = useState(false);
-	const [inputText, setInputText] = useState("");
-	const { inputValue, handleInputChange } = useSearch();
-	const { currentIndex, handleNextWord, handlePreviousWord, topKeywords, getKeywords } =
-		useKeywords();
-	const { topicExtraction, getAnalys } = useAnalysis();
-	const [data, setData] = useState<IAnalysisData>({} as IAnalysisData);
-	const analysis = useSelector((store: AppStore) => store.analisis);
+	const { globalConfig, updateConfig } = useConfig();
+	const { urlProd, urlDev, devEnv } = globalConfig;
+	const { updateSettings } = fetchData();
 
-	const getData = () => {
-		setData(analysis);
-	};
+	// Use state hooks for the form inputs
+	const [prodUrl, setProdUrl] = useState(urlProd);
+	const [devUrl, setDevUrl] = useState(urlDev);
+	const [isDevEnv, setIsDevEnv] = useState(devEnv);
 
-	const topicExtractionScores = topicExtraction.map(([label, score]) => score);
-	const topicExtractionLabels = topicExtraction.map(([label, score]) => label);
-
-	// Keep track of the classification result and the model loading status.
-
-	// Create a reference to the worker object.
-	const worker = useRef<Worker | null>(null);
-
-	// We use the `useEffect` hook to set up the worker as soon as the `App` component is mounted.
-	useEffect(() => {
-		if (!worker.current) {
-			// Create the worker if it does not yet exist.
-			worker.current = new Worker(new URL("./worker.js", import.meta.url), {
-				type: "module",
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		updateConfig({ urlProd: prodUrl, urlDev: devUrl, devEnv: isDevEnv });
+		const updated = await updateSettings({ urlProd: prodUrl, urlDev: devUrl, devEnv: isDevEnv });
+		if (updated.status === 200) {
+			return Swal.fire({
+				toast: true,
+				title: "Configuración actualizada",
+				icon: "success",
+				showConfirmButton: false,
+				position: "center-end",
+				timer: 1500,
 			});
 		}
 
-		// Create a callback function for messages from the worker thread.
-		const onMessageReceived = (e: any) => {
-			switch (e.data.status) {
-				case "initiate":
-					setReady(false);
-					break;
-				case "ready":
-					setReady(true);
-					break;
-				case "complete":
-					setResult(e.data.output[0]);
-					break;
-			}
-
-			console.log(e.data.status);
-		};
-
-		// Attach the callback function as an event listener.
-		worker.current.removeEventListener("message", onMessageReceived);
-	});
-
-	const classify = useCallback((text: string) => {
-		if (worker.current) {
-			worker.current.postMessage({ text });
-		}
-	}, []);
-
-	useEffect(() => {
-		getData();
-		getKeywords();
-		getAnalys();
-	}, []);
+		return;
+	};
 
 	return (
 		<main className="main-index">
 			<div className="chart-container">
 				{/* <RowUser /> */}
-				<ul className="row-header d-flex justify-content-center">
-					<li>
-						<h3>Análisis de texto</h3>
-					</li>
-				</ul>
-				<ul className="row-second-topic">
-					<li className="statistics">
-						<div>
-							<MdAlignHorizontalLeft
-								style={{
-									marginRight: "1rem",
-									marginLeft: ".5rem",
-									width: "1.5rem",
-									height: "1.5rem",
-								}}
-							/>
-							Frecuencia de temas por comentarios
+				<section className="row-header d-flex justify-content-center">
+					<h3>Configuraciones</h3>
+				</section>
+				<article className="row mt-5">
+					<div className="col-12">
+						<div className="card">
+							<div className="card-body">
+								<h5 className="card-title">Configuración activa</h5>
+								<p className="card-text">
+									{devEnv ? (
+										<>
+											<span className="badge bg-warning text-dark">DEV</span>
+											<span className="badge bg-secondary text-light">{urlDev}</span>
+										</>
+									) : (
+										<>
+											<span className="badge bg-success text-light">PROD</span>
+											<span className="badge bg-secondary text-light">{urlProd}</span>
+										</>
+									)}
+								</p>
+							</div>
 						</div>
-					</li>
-				</ul>
+						{/* formulario para editar la configuracion */}
+						<div className="card mt-3">
+							<div className="card-body">
+								<h5 className="card-title">Editar configuración</h5>
+								<div className="card-text">
+									<form onSubmit={handleSubmit}>
+										<div className="mb-3">
+											<label htmlFor="urlProd" className="form-label">
+												URL PRODUCCIÓN
+											</label>
+											<input
+												type="text"
+												className="form-control"
+												id="urlProd"
+												defaultValue={urlProd}
+												onChange={(e) => setProdUrl(e.target.value)}
+											/>
+										</div>
+										<div className="mb-3">
+											<label htmlFor="urlDev" className="form-label">
+												URL DESARROLLO
+											</label>
+											<input
+												type="text"
+												className="form-control"
+												id="urlDev"
+												defaultValue={urlDev}
+												onChange={(e) => setDevUrl(e.target.value)}
+											/>
+										</div>
+										<div className="mb-3 form-check form-switch">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="devEnv"
+												checked={isDevEnv}
+												onChange={() => setIsDevEnv(!isDevEnv)}
+											/>
+											<label className="form-check-label" htmlFor="devEnv">
+												Entorno de desarrollo
+											</label>
+										</div>
+										<button type="submit" className="btn btn-primary">
+											Submit
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</article>
 			</div>
 		</main>
 	);

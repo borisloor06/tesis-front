@@ -6,34 +6,38 @@ import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 import Sidebar from "../../../components/Header/Sidebar";
+import Loader from "../../../components/Loader/Loader";
 import { createAnalisis } from "../../../redux/states/analisis";
-import * as services from "../../../services/GetDataServices";
+import { fetchData } from "../../../services/GetDataServices";
 import IAnalysisData from "../../../services/interfaces/IAnalysisData";
-import { resetAnalisisFiltered } from "../../../redux/states/analisisfiltered";
 
 function Home() {
 	const dispatch = useDispatch();
-
+	const { getAnalysis } = fetchData();
 	const [loading, setLoading] = useState(true);
+	const [isSettings, setIsSettings] = useState(false);
 
 	useEffect(() => {
-		services
-			.getAnalysis()
+		setLoading(true);
+		if (window.location.pathname === "/private/settings") {
+			setIsSettings(true);
+		}
+		getAnalysis()
 			.then((analisis) => {
 				// eslint-disable-next-line no-console
 				const analysisData = analisis.data as IAnalysisData[];
 				if (analysisData.length > 0) {
 					dispatch(createAnalisis(analysisData[0]));
-					setLoading(false);
 				}
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => console.log(error))
+			.finally(() => setLoading(false));
 	}, [dispatch]);
 
 	return (
 		<div className="main-container">
 			<Sidebar />
-			{!loading && <Outlet />}
+			{loading ? isSettings ? <Outlet /> : <Loader /> : <Outlet />}
 		</div>
 	);
 }

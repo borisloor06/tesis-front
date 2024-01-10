@@ -1,32 +1,33 @@
 import "./styles/global.css";
 
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Navigate, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
 import Loader from "./components/Loader/Loader";
+import { Config, useConfig } from "./Config/Config";
 import { PrivateRoutes, PublicRoutes } from "./models";
 import Landing from "./pages/Login/Landing";
 import store from "./redux/store";
+import { fetchData } from "./services/GetDataServices";
 import { RoutesWithNotFound } from "./utilities";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const Private = lazy(() => import("./pages/Private/Private"));
 
 function App() {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const { getSettings } = fetchData();
+	const { updateConfig } = useConfig();
 
-	const handleLogin = () => {
-		// Lógica de autenticación (por ejemplo, hacer una solicitud al servidor)
-		// Si la autenticación es exitosa, establece isLoggedIn en true
-		setIsLoggedIn(true);
-	};
-
-	const handleLogout = () => {
-		// Lógica para cerrar sesión
-		setIsLoggedIn(false);
-	};
+	useEffect(() => {
+		getSettings()
+			.then((settings) => {
+				const { urlProd, urlDev, devEnv } = settings.data as Config;
+				updateConfig({ urlProd, urlDev, devEnv });
+			})
+			.catch((error) => console.log(error));
+	}, []);
 
 	return (
 		<div>
