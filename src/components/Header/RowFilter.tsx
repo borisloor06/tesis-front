@@ -10,7 +10,7 @@ import { fetchData } from "../../services/GetDataServices";
 import IAnalysisData from "../../services/interfaces/IAnalysisData";
 import Loader from "../Loader/Loader";
 
-function RowFilter({ refreshContent, isAnalisis = true }) {
+function RowFilter({ refreshContent, isAnalisis}) {
 	const dispatch = useDispatch();
 	const { globalConfig, updateConfig } = useConfig();
 	const [startDate, setStartDate] = useState("");

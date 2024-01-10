@@ -90,7 +90,7 @@ const AnalysisNLP = () => {
 					<SettingsStatus />
 				</ul>
 				<ul className="row-header">
-					<RowFilter refreshContent={refreshContent} />
+					<RowFilter refreshContent={refreshContent} isAnalisis={true} />
 				</ul>
 				<ul className="row-first">
 					<li>

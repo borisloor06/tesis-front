@@ -57,7 +57,7 @@ const WCPage = () => {
 					<SettingsStatus />
 				</ul>
 				<ul className="row-header">
-					<RowFilter refreshContent={refreshContent} />
+					<RowFilter refreshContent={refreshContent} isAnalisis={true} />
 					<div onClick={handleButtonClick}>
 						<PiArrowsClockwiseBold className="refresh-icon" />
 					</div>

@@ -96,7 +96,7 @@ function Transformers() {
 					<SettingsStatus />
 				</ul>
 				<ul className="row-header d-flex justify-content-center">
-					<RowFilter refreshContent={refreshContent} />
+					<RowFilter refreshContent={refreshContent} isAnalisis={true} />
 				</ul>
 				<ul className="row-first">
 					<li>

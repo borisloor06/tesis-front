@@ -24,7 +24,7 @@ export const ConfigProvider = ({ children }) => {
 		// Definir tus variables globales iniciales aquí
 		urlProd: "https://back.nlp-project.me",
 		urlDev: "http://localhost:5000",
-		devEnv: true,
+		devEnv: false,
 		fechaInicio: "2023-01-01",
 		fechaFin: "",
 	});
