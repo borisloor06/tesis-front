@@ -88,11 +88,9 @@ function RowFilter({ refreshContent, isAnalisis}) {
 				timer: 1500,
 			});
 		}
-		// Llamar al endpoint con las fechas filtradas
-		const startDateFormated = dayjs(startDateTime).format("DD-MM-YYYY");
-		const endDateFormated = dayjs(endDateTime).format("DD-MM-YYYY");
+
 		updateConfig({ fechaInicio: startDate, fechaFin: endDate } as Config);
-		await getAnalisis(startDateFormated, endDateFormated);
+		await getAnalisis(startDate, endDate);
 	};
 
 	const handleCleanClick = async () => {
