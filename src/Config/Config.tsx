@@ -4,6 +4,8 @@ export interface Config {
 	urlProd: string;
 	urlDev: string;
 	devEnv: boolean;
+	fechaInicio: string;
+	fechaFin: string;
 }
 
 const ConfigContext = createContext({
@@ -11,6 +13,8 @@ const ConfigContext = createContext({
 		urlProd: "",
 		urlDev: "",
 		devEnv: false,
+		fechaInicio: "2023-01-01",
+		fechaFin: "2023-01-10",
 	},
 	updateConfig: (newConfig: Config) => {},
 });
@@ -21,6 +25,8 @@ export const ConfigProvider = ({ children }) => {
 		urlProd: "https://back.nlp-project.me",
 		urlDev: "http://localhost:5000",
 		devEnv: true,
+		fechaInicio: "2023-01-01",
+		fechaFin: "",
 	});
 
 	const updateConfig = (newConfig: Config) => {

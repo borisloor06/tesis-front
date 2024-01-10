@@ -4,23 +4,26 @@ import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import FirstPageRoundedIcon from "@mui/icons-material/FirstPageRounded";
 import LastPageRoundedIcon from "@mui/icons-material/LastPageRounded";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-import { AppStore } from "../../../redux/store";
+import RowFilter from "../../../components/Header/RowFilter";
+import Loader from "../../../components/Loader/Loader";
+import { useConfig } from "../../../Config/Config";
 import { fetchData } from "../../../services/GetDataServices";
 import IComment, { ResponseComments } from "../../../services/interfaces/IComments";
 import { Styles } from "./HistoryStyles";
 import SettingsStatus from "./SettingsStatus";
 
 function History() {
-	const analysis = useSelector((store: AppStore) => store.analisis);
-	const { getComments } = fetchData();
+	const { getComments, getCommentsByFilter } = fetchData();
+	const { globalConfig } = useConfig();
 	const [comentarios, setComentarios] = useState([] as IComment[]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [total, setTotal] = useState(0);
+	const [refresh, setRefresh] = useState(false);
+	const [loading, setLoading] = useState(false);
 	// Avoid a layout jump when reaching the last page with empty comments.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios?.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comentarios.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -33,7 +36,11 @@ function History() {
 
 	const getComment = async () => {
 		const offset = page * rowsPerPage;
-		const response = await getComments(rowsPerPage, offset);
+		const { fechaInicio, fechaFin } = globalConfig;
+		setLoading(true);
+		const response = fechaFin.length
+			? await getCommentsByFilter(fechaInicio, fechaFin, offset, rowsPerPage)
+			: await getComments(rowsPerPage, offset);
 
 		return response.data as ResponseComments;
 	};
@@ -45,17 +52,28 @@ function History() {
 				setComentarios(comments);
 				setTotal(total);
 			})
-			.catch((error) => console.log(error));
-	}, [page, rowsPerPage]);
+			.catch((error) => console.log(error))
+			.finally(() => setLoading(false));
+	}, [page, rowsPerPage, refresh]);
+
+	const refreshContent = () => {
+		setRefresh((prevRefresh) => !prevRefresh);
+	};
 
 	return (
 		<main className="main-index chart-container w-100 TablePaginationIntroductionDemo">
+			{loading ? <Loader /> : null}
+
 			<ul className="d-flex flex-row-reverse">
 				<SettingsStatus />
 			</ul>
 			<div className="row-header d-flex justify-content-center mt-2">
 				<h3>Commentarios de Reddit r/ChatGpt</h3>
 			</div>
+			<ul className="row-header mt-2 pt-3">
+				<RowFilter refreshContent={refreshContent} isAnalisis={false} />
+			</ul>
+
 			<table aria-label="custom pagination table" className="d-table mt-5">
 				<thead>
 					<tr>
@@ -67,7 +85,7 @@ function History() {
 					</tr>
 				</thead>
 				<tbody>
-					{comentarios?.length ? (
+					{comentarios.length ? (
 						comentarios.map((row) => (
 							<tr key={row.id}>
 								<td>{row.id}</td>
@@ -76,7 +94,7 @@ function History() {
 									{row.body}
 								</td>
 								<td align="right">{row.subreddit_id}</td>
-								<td align="right">{row.created_date}</td>
+								<td align="right">{new Date(row.created * 1000).toLocaleString()}</td>
 							</tr>
 						))
 					) : (
