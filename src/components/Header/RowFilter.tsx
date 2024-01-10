@@ -44,7 +44,7 @@ function RowFilter({ refreshContent, isAnalisis = true }) {
 			updateConfig({ fechaInicio: startDate, fechaFin: endDate } as Config);
 			setLoading(false);
 			refreshContent(true);
-			
+
 			return;
 		}
 		// Validar que ambas fechas estén seleccionadas
@@ -97,7 +97,7 @@ function RowFilter({ refreshContent, isAnalisis = true }) {
 
 	const handleCleanClick = async () => {
 		dispatch(resetAnalisisFiltered());
-
+		updateConfig({ fechaInicio: "", fechaFin: "" } as Config);
 		refreshContent(true);
 	};
 
