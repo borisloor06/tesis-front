@@ -1,21 +1,34 @@
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 
+import { Config, useConfig } from "../../Config/Config";
 import { createAnalisisFiltered, resetAnalisisFiltered } from "../../redux/states/analisisfiltered";
-import * as services from "../../services/GetDataServices";
+import { fetchData } from "../../services/GetDataServices";
 import IAnalysisData from "../../services/interfaces/IAnalysisData";
 import Loader from "../Loader/Loader";
 
-function RowFilter({ refreshContent }) {
+function RowFilter({ refreshContent, isAnalisis}) {
 	const dispatch = useDispatch();
+	const { globalConfig, updateConfig } = useConfig();
+	const [startDate, setStartDate] = useState("");
+	const [endDate, setEndDate] = useState("");
 	const [loading, setLoading] = useState(false);
+	const { getAnalysisByFilter } = fetchData();
+	const { fechaInicio, fechaFin } = globalConfig;
+
+	useEffect(() => {
+		// Set initial values only once when the component mounts
+		setStartDate(fechaInicio);
+		setEndDate(fechaFin);
+	}, [fechaInicio, fechaFin]);
 
 	const getAnalisis = async (startDate: string, endDate: string) => {
 		try {
 			setLoading(true);
-			const analysisResponse = await services.getAnalysisByFilter(startDate, endDate);
+			const analysisResponse = await getAnalysisByFilter(startDate, endDate);
 			const analysisData = analysisResponse.data as IAnalysisData[];
 			dispatch(createAnalisisFiltered(analysisData[0]));
 			setLoading(false);
@@ -27,17 +40,23 @@ function RowFilter({ refreshContent }) {
 	};
 
 	const handleFilterClick = async () => {
-		// Obtener las fechas de inicio y fin
-		const startDateElement = document.getElementById("date-start") as HTMLInputElement;
-		const endDateElement = document.getElementById("date-end") as HTMLInputElement;
-		const startDate = startDateElement.value;
-		const endDate = endDateElement.value;
-
-		// Validar que ambas fechas estén seleccionadas
-		if (!startDate || !endDate) {
-			alert("Selecciona ambas fechas");
+		if (!isAnalisis) {
+			updateConfig({ fechaInicio: startDate, fechaFin: endDate } as Config);
+			setLoading(false);
+			refreshContent(true);
 
 			return;
+		}
+		// Validar que ambas fechas estén seleccionadas
+		if (!startDate || !endDate) {
+			return Swal.fire({
+				toast: true,
+				title: "Selecciona ambas fechas",
+				icon: "warning",
+				showConfirmButton: false,
+				position: "center-end",
+				timer: 1500,
+			});
 		}
 
 		// Convertir las fechas a objetos Date
@@ -46,37 +65,43 @@ function RowFilter({ refreshContent }) {
 
 		// Validar que la fecha de inicio no sea mayor a la fecha de fin
 		if (startDateTime > endDateTime) {
-			alert("La fecha de inicio no puede ser mayor que la fecha de fin");
-
-			return;
+			return Swal.fire({
+				toast: true,
+				title: "La fecha de inicio no puede ser mayor a la fecha de fin",
+				icon: "warning",
+				showConfirmButton: false,
+				position: "center-end",
+				timer: 1500,
+			});
 		}
 
 		// Validar que el rango de fechas no sea mayor a un mes
 		const diff = endDateTime.getTime() - startDateTime.getTime();
 		const diffDays = diff / (1000 * 3600 * 24);
 		if (diffDays > 30) {
-			alert("El rango de fechas no puede ser mayor a un mes");
-
-			return;
+			return Swal.fire({
+				toast: true,
+				title: "El rango de fechas no puede ser mayor a un mes",
+				icon: "warning",
+				showConfirmButton: false,
+				position: "center-end",
+				timer: 1500,
+			});
 		}
-		console.log(startDateTime, endDateTime);
-		// Llamar al endpoint con las fechas filtradas
-		const startDateFormated = dayjs(startDateTime).format("DD-MM-YYYY");
-		const endDateFormated = dayjs(endDateTime).format("DD-MM-YYYY");
-		await getAnalisis(startDateFormated, endDateFormated);
+
+		updateConfig({ fechaInicio: startDate, fechaFin: endDate } as Config);
+		await getAnalisis(startDate, endDate);
 	};
 
 	const handleCleanClick = async () => {
 		dispatch(resetAnalisisFiltered());
+		updateConfig({ fechaInicio: "", fechaFin: "" } as Config);
 		refreshContent(true);
 	};
 
 	return (
 		<>
 			{loading ? <Loader /> : null}
-			<li>
-				<h3>Datos del análisis</h3>
-			</li>
 			<li>
 				<IoFilterSharp
 					style={{
@@ -89,11 +114,26 @@ function RowFilter({ refreshContent }) {
 				<div className="dates-extraction-filter">
 					<div>
 						<div>Fecha Inicio:</div>
-						<input type="date" name="date-start" id="date-start" />
+						<input
+							defaultValue={startDate}
+							onChange={(e) => {
+								console.log(e.target.value);
+								setStartDate(e.target.value);
+							}}
+							type="date"
+							name="date-start"
+							id="date-start"
+						/>
 					</div>
 					<div>
 						<div>Fecha Fin:</div>
-						<input type="date" name="date-end" id="date-end" />
+						<input
+							defaultValue={endDate}
+							onChange={(e) => setEndDate(e.target.value)}
+							type="date"
+							name="date-end"
+							id="date-end"
+						/>
 					</div>
 				</div>
 				<div className="btn-group w-25 d-flex justify-content-around">
