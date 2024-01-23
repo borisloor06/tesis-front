@@ -194,12 +194,12 @@ const AnalysisNLP = () => {
 									height: "2rem",
 								}}
 							/>
-							Sentimientos positivos
+							Emociones positivas
 						</div>
 						<BarsChart
 							labels={positiveSentimentsLabels}
 							data={positiveSentimentsScores}
-							title="Sentimientos positivos"
+							title="Emociones positivos"
 							backG={[
 								"#00CCC9cc",
 								"#00A3A0cc",
@@ -223,12 +223,12 @@ const AnalysisNLP = () => {
 									height: "2rem",
 								}}
 							/>
-							Sentimientos negativos
+							Emociones negativas
 						</div>
 						<BarsChart
 							labels={negativeSentimentsLabels}
 							data={negativeSentimentsScores}
-							title="Sentimientos negativos"
+							title="Emociones negativos"
 							backG={["#CC0E00bb", "#A30B00cc", "#F01000cc", "#7A0800cc", "#510600cc", "#E60F00cc"]}
 						/>
 					</li>
@@ -241,12 +241,12 @@ const AnalysisNLP = () => {
 									height: "2rem",
 								}}
 							/>
-							Sentimientos neutrales
+							Emociones neutrales
 						</div>
 						<BarsChart
 							labels={neutralSentimentsLabels}
 							data={neutralSentimentsScores}
-							title="Sentimientos neutrales"
+							title="Emociones neutrales"
 							backG={["#CCBE00cc", "#A39800cc", "#F0E000cc", "#7A7200cc"]}
 						/>
 					</li>

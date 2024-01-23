@@ -12,8 +12,8 @@ const useSentiments = () => {
 
 	const GetSentiments = () => {
 		const sentimentsData = analisisFiltered.total_posts
-			? analisisFiltered.emotion_analysis.average
-			: analysis.emotion_analysis.average;
+			? analisisFiltered.emotion_analysis.count
+			: analysis.emotion_analysis.count;
 
 		const positiveSentiments: [string, number][] = [];
 		const negativeSentiments: [string, number][] = [];
